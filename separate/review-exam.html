@@ -88,28 +88,28 @@
         </div>
     </div>
 
-    <main class="flex-1 relative h-screen overflow-y-auto w-full p-6 md:p-10 max-w-6xl mx-auto pb-24">
+    <main class="flex-1 relative h-screen overflow-y-auto w-full p-4 md:p-6 lg:p-10 max-w-6xl mx-auto pb-24 md:pb-24">
         <div
-            class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-6 sticky top-0 bg-gray-50/95 backdrop-blur-xl z-40 py-6 border-b border-gray-200 shadow-sm px-4 md:px-8 -mx-4 md:-mx-8 rounded-b-3xl">
+            class="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8 gap-4 md:gap-6 sticky top-0 bg-gray-50/95 backdrop-blur-xl z-40 py-4 md:py-6 border-b border-gray-200 shadow-sm px-3 md:px-8 -mx-3 md:-mx-8 rounded-b-2xl md:rounded-b-3xl">
             <div class="flex items-center gap-4">
                 <button onclick="goBack()" class="p-3 bg-white border border-gray-200 hover:bg-gray-100 rounded-2xl"><i
                         data-lucide="chevron-left" class="w-6 h-6"></i></button>
                 <div>
-                    <h2 class="text-3xl font-black text-gray-900 tracking-tight">Review & Refine</h2>
+                    <h2 class="text-xl md:text-3xl font-black text-gray-900 tracking-tight">Review & Refine</h2>
                 </div>
             </div>
             <div class="flex items-center gap-3 self-end md:self-auto">
                 <button onclick="handleSaveDraft()"
-                    class="px-6 py-4 bg-white border border-gray-200 text-indigo-600 rounded-2xl font-black tracking-widest uppercase flex items-center justify-center gap-2 shadow-sm hover:bg-indigo-50 hover:border-indigo-200 transition-all active:scale-95"><i
-                        data-lucide="save" class="w-[22px] h-[22px]"></i> Save Draft</button>
+                    class="px-4 md:px-6 py-3 md:py-4 bg-white border border-gray-200 text-indigo-600 rounded-2xl font-black tracking-widest uppercase flex items-center justify-center gap-2 shadow-sm hover:bg-indigo-50 hover:border-indigo-200 transition-all active:scale-95 text-xs md:text-base"><i
+                        data-lucide="save" class="w-[18px] h-[18px] md:w-[22px] md:h-[22px]"></i> Save Draft</button>
                 <button onclick="handlePublish()"
-                    class="px-8 py-4 bg-green-600 text-white rounded-2xl font-black tracking-widest uppercase flex items-center justify-center gap-3 shadow-xl hover:bg-green-700 transition-all active:scale-95"><i
-                        data-lucide="check" class="w-[22px] h-[22px]"></i> Publish</button>
+                    class="px-5 md:px-8 py-3 md:py-4 bg-green-600 text-white rounded-2xl font-black tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 shadow-xl hover:bg-green-700 transition-all active:scale-95 text-xs md:text-base"><i
+                        data-lucide="check" class="w-[18px] h-[18px] md:w-[22px] md:h-[22px]"></i> Publish</button>
             </div>
         </div>
 
         <div
-            class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 mb-8 grid grid-cols-1 md:grid-cols-3 gap-6 relative overflow-hidden">
+            class="bg-white p-4 md:p-8 rounded-[1.5rem] md:rounded-[2rem] shadow-sm border border-gray-100 mb-6 md:mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 relative overflow-hidden">
             <div class="absolute top-0 right-0 w-2 h-full bg-indigo-500"></div>
             <div><label class="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest pl-1">Exam
                     Title</label><input id="r-title"
@@ -138,7 +138,7 @@
             </button>
         </div>
 
-        <h3 class="text-2xl font-black text-gray-900 mt-12 mb-6 tracking-tight flex items-center gap-3"><i
+        <h3 class="text-xl md:text-2xl font-black text-gray-900 mt-8 md:mt-12 mb-4 md:mb-6 tracking-tight flex items-center gap-3"><i
                 data-lucide="shield-alert" class="w-6 h-6 text-red-500"></i> Anti-Cheat Penalty Questions</h3>
         <p class="text-sm text-gray-500 mb-6 font-bold">These questions will be dynamically swapped in if a student
             switches tabs. They are not part of the standard exam flow.</p>
@@ -169,7 +169,7 @@
 
         function logout() {
             sessionStorage.clear();
-            safeNavigate('login.html');
+            safeNavigate('index.html');
         }
 
         const API_BASE = "https://eduguard-2xfk.onrender.com/api";
@@ -180,7 +180,7 @@
             document.getElementById('profile-name').innerText = user.name;
             document.getElementById('profile-avatar').innerText = user.name.charAt(0).toUpperCase();
         } else {
-            safeNavigate('login.html');
+            safeNavigate('index.html');
             document.getElementById('profile-name').innerText = 'Guest (Preview)';
             document.getElementById('profile-avatar').innerText = 'G';
         }
@@ -315,7 +315,7 @@
                     </div>`;
             } else {
                 document.getElementById('q-container').innerHTML = pendingExam.questions.map((q, idx) => `
-                    <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 space-y-6 relative group">
+                    <div class="bg-white p-4 md:p-8 rounded-[1.5rem] md:rounded-[2rem] shadow-sm border border-gray-100 space-y-4 md:space-y-6 relative group">
                         
                         <!-- Delete Question Button -->
                         <button onclick="removeQuestion(${idx})" class="absolute top-6 right-6 p-2 text-gray-300 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors md:opacity-0 group-hover:opacity-100" title="Delete Question">
@@ -326,9 +326,9 @@
                         
                         <textarea placeholder="Enter question text..." oninput="pendingExam.questions[${idx}].q=this.value" class="w-full p-5 border-2 border-gray-100 rounded-2xl bg-gray-50 focus:bg-white focus:border-indigo-400 outline-none text-gray-900 font-bold text-lg resize-none" rows="2">${q.q}</textarea>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50/50 p-6 rounded-3xl border border-gray-50">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 bg-gray-50/50 p-3 md:p-6 rounded-2xl md:rounded-3xl border border-gray-50">
                             ${q.options.map((opt, optIdx) => `
-                                <div class="p-4 rounded-2xl border-2 flex items-center gap-4 transition-all duration-300 ${q.correctIndex === optIdx ? 'border-green-500 bg-green-50 shadow-sm' : 'border-gray-200 bg-white hover:border-gray-300'}">
+                                <div class="p-3 md:p-4 rounded-2xl border-2 flex items-center gap-3 md:gap-4 transition-all duration-300 ${q.correctIndex === optIdx ? 'border-green-500 bg-green-50 shadow-sm' : 'border-gray-200 bg-white hover:border-gray-300'}">
                                     <input type="radio" name="correct_${idx}" ${q.correctIndex === optIdx ? 'checked' : ''} onchange="pendingExam.questions[${idx}].correctIndex=${optIdx}; renderQs();" class="w-6 h-6 cursor-pointer opacity-0 absolute z-10" />
                                     <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${q.correctIndex === optIdx ? 'border-green-600 bg-green-600' : 'border-gray-300'}">
                                         ${q.correctIndex === optIdx ? '<i data-lucide="check" class="w-[14px] h-[14px] text-white"></i>' : ''}
@@ -379,7 +379,7 @@
                     </div>`;
             } else {
                 document.getElementById('penalty-container').innerHTML = pendingExam.penaltyQuestions.map((q, idx) => `
-                    <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-red-100 space-y-6 relative group">
+                    <div class="bg-white p-4 md:p-8 rounded-[1.5rem] md:rounded-[2rem] shadow-sm border border-red-100 space-y-4 md:space-y-6 relative group">
                         <!-- Delete Question Button -->
                         <button onclick="removePenaltyQuestion(${idx})" class="absolute top-6 right-6 p-2 text-gray-300 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors md:opacity-0 group-hover:opacity-100" title="Delete Question">
                             <i data-lucide="trash-2" class="w-5 h-5"></i>
@@ -389,9 +389,9 @@
                         
                         <textarea placeholder="Enter penalty question text..." oninput="pendingExam.penaltyQuestions[${idx}].q=this.value" class="w-full p-5 border-2 border-red-100 rounded-2xl bg-red-50/30 focus:bg-white focus:border-red-400 outline-none text-gray-900 font-bold text-lg resize-none" rows="2">${q.q}</textarea>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50/50 p-6 rounded-3xl border border-gray-50">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 bg-gray-50/50 p-3 md:p-6 rounded-2xl md:rounded-3xl border border-gray-50">
                             ${q.options.map((opt, optIdx) => `
-                                <div class="p-4 rounded-2xl border-2 flex items-center gap-4 transition-all duration-300 ${q.correctIndex === optIdx ? 'border-red-500 bg-red-50 shadow-sm' : 'border-gray-200 bg-white hover:border-gray-300'}">
+                                <div class="p-3 md:p-4 rounded-2xl border-2 flex items-center gap-3 md:gap-4 transition-all duration-300 ${q.correctIndex === optIdx ? 'border-red-500 bg-red-50 shadow-sm' : 'border-gray-200 bg-white hover:border-gray-300'}">
                                     <input type="radio" name="penalty_correct_${idx}" ${q.correctIndex === optIdx ? 'checked' : ''} onchange="pendingExam.penaltyQuestions[${idx}].correctIndex=${optIdx}; renderPenaltyQs();" class="w-6 h-6 cursor-pointer opacity-0 absolute z-10" />
                                     <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${q.correctIndex === optIdx ? 'border-red-600 bg-red-600' : 'border-gray-300'}">
                                         ${q.correctIndex === optIdx ? '<i data-lucide="check" class="w-[14px] h-[14px] text-white"></i>' : ''}

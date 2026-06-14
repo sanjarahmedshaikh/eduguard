@@ -7,6 +7,11 @@
     <title>Teacher Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @media (max-width: 767px) {
+            body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+        }
+    </style>
 </head>
 
 <body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex">
@@ -71,9 +76,9 @@
     <main class="flex-1 relative h-screen overflow-y-auto w-full p-6 md:p-10 pb-24 md:pb-10 max-w-7xl mx-auto">
         <header class="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-8">
             <div>
-                <h2 class="text-4xl font-black text-gray-900 tracking-tight">Dashboard Overview</h2>
+                <h2 class="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">Dashboard Overview</h2>
             </div>
-            <div class="flex items-center gap-4">
+            <div class="flex flex-wrap items-center gap-3 md:gap-4">
                 <button onclick="fetchExams()"
                     class="p-3 bg-white border border-gray-200 rounded-2xl text-gray-500 hover:text-indigo-600 transition-all shadow-sm active:scale-95"><i
                         data-lucide="refresh-ccw" class="w-[22px] h-[22px]"></i></button>
@@ -83,9 +88,9 @@
             </div>
         </header>
 
-        <div id="stats-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"></div>
+        <div id="stats-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8"></div>
 
-        <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+        <div class="bg-white rounded-[1.5rem] md:rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
             <div class="p-6 md:p-8 border-b border-gray-100 bg-white">
                 <h3 class="font-black text-2xl text-gray-800 tracking-tight">Your Assessments</h3>
             </div>

@@ -7,6 +7,11 @@
     <title>Student Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @media (max-width: 767px) {
+            body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+        }
+    </style>
 </head>
 
 <body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex">
@@ -71,13 +76,13 @@
     <!-- Main Content -->
     <main class="flex-1 relative h-screen overflow-y-auto w-full p-6 md:p-10 pb-24 max-w-7xl mx-auto">
         <header
-            class="flex flex-col md:flex-row md:justify-between md:items-center gap-6 bg-gradient-to-br from-indigo-600 to-indigo-900 p-10 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden mb-8">
+            class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-6 bg-gradient-to-br from-indigo-600 to-indigo-900 p-5 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden mb-6 md:mb-8">
             <div class="relative z-10">
                 <p
                     class="text-indigo-300 font-black tracking-[0.2em] text-[10px] uppercase mb-3 bg-white/10 w-fit px-3 py-1 rounded-full border border-white/20">
                     Student Portal</p>
-                <h2 id="greet-name" class="text-4xl md:text-5xl font-black tracking-tight mb-3">Hello</h2>
-                <p class="text-indigo-100 font-medium text-lg md:text-xl">Ready to test your knowledge?</p>
+                <h2 id="greet-name" class="text-2xl md:text-4xl lg:text-5xl font-black tracking-tight mb-2 md:mb-3">Hello</h2>
+                <p class="text-indigo-100 font-medium text-base md:text-lg lg:text-xl">Ready to test your knowledge?</p>
             </div>
 
             <div class="relative z-10 md:self-start">
@@ -93,7 +98,7 @@
             <div class="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl"></div>
         </header>
 
-        <h3 class="font-black text-2xl text-gray-800 mb-8 flex items-center gap-3 tracking-tight">
+        <h3 class="font-black text-xl md:text-2xl text-gray-800 mb-6 md:mb-8 flex items-center gap-3 tracking-tight">
             <div class="p-2 bg-indigo-100 text-indigo-600 rounded-xl"><i data-lucide="book-open" class="w-6 h-6"></i>
             </div> Available Assessments
         </h3>
