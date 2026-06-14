@@ -15,8 +15,16 @@
             transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         @media (max-width: 767px) {
+            #sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                z-index: 100;
+            }
             #sidebar:not(.expanded) {
                 width: 4rem; /* w-16 */
+                box-shadow: none;
             }
             #sidebar:not(.expanded) .hidden-compact {
                 display: none !important;
@@ -29,11 +37,6 @@
             }
             #sidebar.expanded {
                 width: 18rem; /* w-72 */
-                position: fixed;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                z-index: 100;
                 box-shadow: 10px 0 30px rgba(0, 0, 0, 0.15);
             }
             #sidebar-overlay {
@@ -46,6 +49,16 @@
             }
             #sidebar.expanded ~ #sidebar-overlay {
                 display: block;
+            }
+            main {
+                margin-left: 4rem !important;
+                width: calc(100% - 4rem) !important;
+            }
+        }
+        @media (min-width: 768px) {
+            #sidebar {
+                position: relative;
+                width: 18rem; /* w-72 */
             }
         }
     </style>
@@ -147,7 +160,7 @@
 
             <div class="flex flex-col gap-3 p-0 md:p-4 bg-transparent md:bg-gray-50 rounded-2xl border-0 md:border md:border-gray-100 md:shadow-sm w-full items-center md:items-stretch">
                 <div class="flex items-center gap-3 overflow-hidden justify-center md:justify-start">
-                    <div id="profile-avatar" onclick="showToast('Profile interface would open here in the full app.'); event.stopPropagation();"
+                    <div id="profile-avatar" onclick="handleProfileClick(event)"
                         class="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center font-black flex-shrink-0 text-lg border border-indigo-200 cursor-pointer md:cursor-default"
                         title="View Profile">
                         U
@@ -158,13 +171,13 @@
                         </p>
                     </div>
                 </div>
-                <button onclick="showToast('Profile interface would open here in the full app.'); event.stopPropagation();"
+                <button onclick="handleProfileClick(event)"
                     class="hidden-compact w-full py-2.5 bg-white border border-gray-200 text-xs font-black tracking-widest uppercase text-gray-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all rounded-xl shadow-sm active:scale-95">
                     View Profile
                 </button>
             </div>
 
-            <button onclick="logout()"
+            <button onclick="logout(); event.stopPropagation();"
                 class="items-center-compact flex items-center justify-center md:justify-start gap-3 p-3 md:px-4 md:py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-all font-bold w-full group"
                 title="Sign Out">
                 <i data-lucide="log-out" class="w-5 h-5 flex-shrink-0 group-hover:-translate-x-1 transition-transform"></i>
@@ -252,6 +265,11 @@
         }
 
         function safeNavigate(url) {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth < 768 && sidebar && !sidebar.classList.contains('expanded')) {
+                sidebar.classList.add('expanded');
+                return;
+            }
             try {
                 window.location.href = url;
             } catch (e) {
@@ -261,8 +279,23 @@
         }
 
         function logout() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth < 768 && sidebar && !sidebar.classList.contains('expanded')) {
+                sidebar.classList.add('expanded');
+                return;
+            }
             sessionStorage.clear();
             safeNavigate('index.html');
+        }
+
+        function handleProfileClick(e) {
+            if (e) e.stopPropagation();
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth < 768 && sidebar && !sidebar.classList.contains('expanded')) {
+                sidebar.classList.add('expanded');
+                return;
+            }
+            showToast('Profile interface would open here in the full app.');
         }
 
         function formatDate(dateString) {

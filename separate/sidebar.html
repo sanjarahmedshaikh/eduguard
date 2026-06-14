@@ -14,8 +14,16 @@
             transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         @media (max-width: 767px) {
+            #sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                z-index: 100;
+            }
             #sidebar:not(.expanded) {
                 width: 4rem; /* w-16 */
+                box-shadow: none;
             }
             #sidebar:not(.expanded) .hidden-compact {
                 display: none !important;
@@ -28,11 +36,6 @@
             }
             #sidebar.expanded {
                 width: 18rem; /* w-72 */
-                position: fixed;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                z-index: 100;
                 box-shadow: 10px 0 30px rgba(0, 0, 0, 0.15);
             }
             #sidebar-overlay {
@@ -45,6 +48,16 @@
             }
             #sidebar.expanded ~ #sidebar-overlay {
                 display: block;
+            }
+            main {
+                margin-left: 4rem !important;
+                width: calc(100% - 4rem) !important;
+            }
+        }
+        @media (min-width: 768px) {
+            #sidebar {
+                position: relative;
+                width: 18rem; /* w-72 */
             }
         }
     </style>
@@ -73,13 +86,13 @@
 
         <div class="flex flex-col gap-3 px-2 md:px-6 w-full items-center md:items-stretch">
             <!-- Active Link Example -->
-            <button class="items-center-compact flex flex-row items-center justify-center md:justify-start gap-4 p-3 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-full transition-all text-indigo-700 bg-indigo-50/80 font-black shadow-sm border border-indigo-100"
+            <button onclick="safeNavigate('teacher-dashboard.html')" class="items-center-compact flex flex-row items-center justify-center md:justify-start gap-4 p-3 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-full transition-all text-indigo-700 bg-indigo-50/80 font-black shadow-sm border border-indigo-100"
                 title="Dashboard">
                 <i data-lucide="layout-dashboard" class="w-[22px] h-[22px] flex-shrink-0"></i>
                 <span class="text-sm tracking-wide hidden-compact">Dashboard</span>
             </button>
             <!-- Inactive Link Example -->
-            <button class="items-center-compact flex flex-row items-center justify-center md:justify-start gap-4 p-3 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold"
+            <button onclick="safeNavigate('create-exam.html')" class="items-center-compact flex flex-row items-center justify-center md:justify-start gap-4 p-3 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold"
                 title="Create Exam">
                 <i data-lucide="plus-circle" class="w-[22px] h-[22px] flex-shrink-0"></i>
                 <span class="text-sm tracking-wide hidden-compact">Create Exam</span>
@@ -97,7 +110,7 @@
 
             <div class="flex flex-col gap-3 p-0 md:p-4 bg-transparent md:bg-gray-50 rounded-2xl border-0 md:border md:border-gray-100 md:shadow-sm w-full items-center md:items-stretch">
                 <div class="flex items-center gap-3 overflow-hidden justify-center md:justify-start">
-                    <div id="profile-avatar" onclick="showToast('Profile interface would open here in the full app.'); event.stopPropagation();"
+                    <div id="profile-avatar" onclick="handleProfileClick(event)"
                         class="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center font-black flex-shrink-0 text-lg border border-indigo-200 cursor-pointer md:cursor-default"
                         title="View Profile">
                         J
@@ -107,13 +120,13 @@
                         <p class="text-[10px] text-gray-500 font-bold tracking-widest uppercase truncate mt-0.5">Teacher</p>
                     </div>
                 </div>
-                <button onclick="showToast('Profile interface would open here in the full app.'); event.stopPropagation();"
+                <button onclick="handleProfileClick(event)"
                     class="hidden-compact w-full py-2.5 bg-white border border-gray-200 text-xs font-black tracking-widest uppercase text-gray-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all rounded-xl shadow-sm active:scale-95">
                     View Profile
                 </button>
             </div>
 
-            <button class="items-center-compact flex items-center justify-center md:justify-start gap-3 p-3 md:px-4 md:py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-all font-bold w-full group"
+            <button onclick="logout(); event.stopPropagation();" class="items-center-compact flex items-center justify-center md:justify-start gap-3 p-3 md:px-4 md:py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-all font-bold w-full group"
                 title="Sign Out">
                 <i data-lucide="log-out" class="w-5 h-5 flex-shrink-0 group-hover:-translate-x-1 transition-transform"></i>
                 <span class="hidden-compact">Sign Out</span>
@@ -150,6 +163,40 @@
                 toastRoot.innerHTML = `<div class="fixed top-6 right-6 z-[9999] p-4 rounded-2xl shadow-2xl bg-gray-900 text-white text-sm font-semibold">${msg}</div>`;
                 setTimeout(() => toastRoot.innerHTML = '', 3000);
             }
+        }
+
+        function safeNavigate(url) {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth < 768 && sidebar && !sidebar.classList.contains('expanded')) {
+                sidebar.classList.add('expanded');
+                return;
+            }
+            try {
+                window.location.href = url;
+            } catch (e) {
+                console.warn(`Navigation to ${url} blocked by preview sandbox.`);
+                showToast(`Navigation to ${url} blocked in preview. Please run locally.`);
+            }
+        }
+
+        function logout() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth < 768 && sidebar && !sidebar.classList.contains('expanded')) {
+                sidebar.classList.add('expanded');
+                return;
+            }
+            sessionStorage.clear();
+            safeNavigate('index.html');
+        }
+
+        function handleProfileClick(e) {
+            if (e) e.stopPropagation();
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth < 768 && sidebar && !sidebar.classList.contains('expanded')) {
+                sidebar.classList.add('expanded');
+                return;
+            }
+            showToast('Profile interface would open here in the full app.');
         }
 
         lucide.createIcons();
