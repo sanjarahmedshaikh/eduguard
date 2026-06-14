@@ -21,6 +21,7 @@
                 top: 0;
                 bottom: 0;
                 z-index: 100;
+                height: 100dvh !important;
             }
             #sidebar:not(.expanded) {
                 width: 4rem; /* w-16 */
@@ -89,11 +90,11 @@
 
     <!-- Sidebar -->
     <div id="sidebar" onclick="handleSidebarClick(event)"
-        class="h-screen bg-white border-r border-gray-100 flex flex-col justify-start pt-6 z-50 overflow-y-auto flex-shrink-0 w-16 md:w-72 transition-all duration-300 relative">
+        class="h-screen bg-white border-r border-gray-100 flex flex-col justify-start pt-3 md:pt-6 z-50 overflow-y-auto flex-shrink-0 w-16 md:w-72 transition-all duration-300 relative">
         
 
 
-        <div onclick="toggleSidebar(event)" class="cursor-pointer mb-8 md:mb-10 px-2 md:px-8 w-full pt-2 flex flex-col items-center md:items-start">
+        <div onclick="toggleSidebar(event)" class="cursor-pointer mb-4 md:mb-10 px-2 md:px-8 w-full pt-2 flex flex-col items-center md:items-start">
             <h1 class="text-3xl font-black text-indigo-600 flex items-center justify-center md:justify-start gap-3">
                 <i data-lucide="shield-alert" class="w-8 h-8 flex-shrink-0 text-indigo-600"></i>
                 <span class="hidden-compact">EduGuard</span>
@@ -104,15 +105,15 @@
             </div>
         </div>
 
-        <div class="flex flex-col gap-3 px-2 md:px-6 w-full items-center md:items-stretch">
+        <div class="flex flex-col gap-2 md:gap-3 px-2 md:px-6 w-full items-center md:items-stretch">
             <button onclick="safeNavigate('teacher-dashboard.html')"
-                class="items-center-compact flex flex-row items-center justify-center md:justify-start gap-4 p-3 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold"
+                class="items-center-compact flex flex-row items-center justify-center md:justify-start gap-4 p-2.5 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold"
                 title="Dashboard">
                 <i data-lucide="layout-dashboard" class="w-[22px] h-[22px] flex-shrink-0"></i>
                 <span class="text-sm tracking-wide hidden-compact">Dashboard</span>
             </button>
             <button onclick="safeNavigate('create-exam.html')"
-                class="items-center-compact flex flex-row items-center justify-center md:justify-start gap-4 p-3 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-full transition-all text-indigo-700 bg-indigo-50/80 font-black shadow-sm border border-indigo-100"
+                class="items-center-compact flex flex-row items-center justify-center md:justify-start gap-4 p-2.5 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-full transition-all text-indigo-700 bg-indigo-50/80 font-black shadow-sm border border-indigo-100"
                 title="Create Exam">
                 <i data-lucide="plus-circle" class="w-[22px] h-[22px] flex-shrink-0"></i>
                 <span class="text-sm tracking-wide hidden-compact">Create Exam</span>
@@ -120,9 +121,9 @@
         </div>
 
         <!-- Profile & Sign Out Bottom Section -->
-        <div class="flex mt-auto pb-6 md:pb-10 w-full px-2 md:px-8 flex-col gap-4 items-center md:items-stretch">
+        <div class="flex mt-auto pb-4 md:pb-10 w-full px-2 md:px-8 flex-col gap-3 md:gap-4 items-center md:items-stretch">
             <div
-                class="items-center-compact flex items-center justify-center md:justify-start gap-3 text-[10px] font-black tracking-widest text-green-600 bg-green-50 p-3 md:px-4 md:py-3 rounded-xl border border-green-100 shadow-sm w-full"
+                class="items-center-compact flex items-center justify-center md:justify-start gap-3 text-[10px] font-black tracking-widest text-green-600 bg-green-50 p-2.5 md:px-4 md:py-3 rounded-xl border border-green-100 shadow-sm w-full"
                 title="System Online">
                 <i data-lucide="wifi" class="w-4 h-4 flex-shrink-0 text-green-600"></i>
                 <span class="hidden-compact">SYSTEM ONLINE</span>
@@ -148,7 +149,7 @@
             </div>
 
             <button onclick="logout(); event.stopPropagation();"
-                class="items-center-compact flex items-center justify-center md:justify-start gap-3 p-3 md:px-4 md:py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-all font-bold w-full group"
+                class="items-center-compact flex items-center justify-center md:justify-start gap-3 p-2.5 md:px-4 md:py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-all font-bold w-full group"
                 title="Sign Out">
                 <i data-lucide="log-out" class="w-5 h-5 flex-shrink-0 group-hover:-translate-x-1 transition-transform"></i>
                 <span class="hidden-compact">Sign Out</span>
