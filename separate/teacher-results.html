@@ -7,6 +7,11 @@
     <title>Teacher Results</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @media (max-width: 767px) {
+            body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+        }
+    </style>
 </head>
 
 <body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex">
@@ -15,13 +20,13 @@
     <!-- Student Detail Modal -->
     <div id="detail-modal"
         class="hidden fixed inset-0 z-[100] bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-[2rem] shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-300"
+        <div class="bg-white rounded-[1.5rem] md:rounded-[2rem] shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden transform scale-95 transition-transform duration-300"
             id="detail-modal-content">
             <!-- Modal Header -->
             <div
                 class="p-6 md:p-8 border-b border-gray-100 flex justify-between items-start md:items-center bg-gray-50/50">
                 <div>
-                    <h3 class="text-2xl md:text-3xl font-black text-gray-900 tracking-tight" id="modal-student-name">
+                    <h3 class="text-xl md:text-2xl lg:text-3xl font-black text-gray-900 tracking-tight" id="modal-student-name">
                         Student Name</h3>
                     <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2">
                         <p class="text-sm font-bold text-gray-500 uppercase tracking-widest" id="modal-student-id">ID:
@@ -42,7 +47,7 @@
             <!-- Modal Body -->
             <div class="p-6 md:p-8 overflow-y-auto flex-1 bg-white">
                 <!-- Stats Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8" id="modal-stats-grid">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4 mb-6 md:mb-8" id="modal-stats-grid">
                     <!-- Dynamic stats injected here -->
                 </div>
 
@@ -124,7 +129,7 @@
                     class="p-4 bg-white border border-gray-200 hover:bg-gray-50 hover:text-indigo-600 rounded-2xl transition-all shadow-sm"><i
                         data-lucide="chevron-left" class="w-6 h-6"></i></button>
                 <div>
-                    <h2 class="text-4xl font-black text-gray-900 tracking-tight">Submission Reports</h2>
+                    <h2 class="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">Submission Reports</h2>
                     <p id="total-count"
                         class="text-sm font-bold text-gray-500 mt-2 uppercase tracking-widest bg-gray-100 px-3 py-1 rounded-md w-fit border border-gray-200">
                         Loading...</p>
@@ -139,8 +144,9 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-[2.5rem] border border-gray-100 shadow-xl overflow-hidden">
-            <table class="w-full text-left">
+        <div class="bg-white rounded-[1.5rem] md:rounded-[2.5rem] border border-gray-100 shadow-xl overflow-hidden">
+            <div class="overflow-x-auto">
+            <table class="w-full text-left min-w-[600px]">
                 <thead class="bg-gray-50/80 border-b border-gray-100">
                     <tr>
                         <th class="p-6 font-black text-gray-400 text-xs tracking-widest uppercase">Student Profile</th>
@@ -153,6 +159,7 @@
                 </thead>
                 <tbody id="results-body" class="divide-y divide-gray-50"></tbody>
             </table>
+            </div>
         </div>
     </main>
 

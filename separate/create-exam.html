@@ -7,6 +7,11 @@
     <title>Create Exam</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @media (max-width: 767px) {
+            body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+        }
+    </style>
 </head>
 
 <body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex">
@@ -70,17 +75,17 @@
 
     <!-- Main Content -->
     <main class="flex-1 relative h-screen overflow-y-auto w-full p-6 md:p-10 pb-24 max-w-4xl mx-auto">
-        <h2 class="text-4xl md:text-5xl font-black mb-10 text-gray-900 tracking-tight text-center">Design Assessment
+        <h2 class="text-2xl md:text-4xl lg:text-5xl font-black mb-6 md:mb-10 text-gray-900 tracking-tight text-center">Design Assessment
         </h2>
 
         <div class="space-y-8">
-            <section class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-xl border border-gray-100 relative">
+            <section class="bg-white p-5 md:p-8 lg:p-10 rounded-[1.5rem] md:rounded-[2.5rem] shadow-xl border border-gray-100 relative">
                 <div class="grid grid-cols-1 gap-8">
                     <div><label class="block text-xs font-black text-gray-400 uppercase mb-3">Examination
                             Title</label><input id="ex-title" type="text" placeholder="e.g. Advanced Biology"
                             class="w-full p-5 border-2 rounded-2xl outline-none focus:border-indigo-400 font-black text-xl bg-gray-50" />
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                         <div><label class="block text-xs font-black text-gray-400 uppercase mb-3">Time Limit
                                 (Mins)</label><input id="ex-dur" type="number" value="20" min="1"
                                 class="w-full p-5 border-2 rounded-2xl outline-none font-black text-xl bg-gray-50" />
@@ -106,16 +111,16 @@
             </section>
 
             <section
-                class="bg-gradient-to-br from-indigo-600 to-indigo-900 p-8 md:p-10 rounded-[2.5rem] shadow-2xl text-white">
-                <h3 class="font-black text-3xl mb-2">Content Engine</h3>
+                class="bg-gradient-to-br from-indigo-600 to-indigo-900 p-5 md:p-8 lg:p-10 rounded-[1.5rem] md:rounded-[2.5rem] shadow-2xl text-white">
+                <h3 class="font-black text-xl md:text-3xl mb-2">Content Engine</h3>
                 <p class="text-indigo-200 text-sm md:text-base font-medium mb-6">If API limits are high, use Direct AI.
                     Otherwise, use ChatGPT for free unlimited generation.</p>
 
                 <textarea id="ex-topic"
                     placeholder="Paste syllabus or topic details here (Required for AI generation AND for Anti-Cheat penalties)..."
-                    class="w-full p-8 rounded-3xl bg-white/10 border border-white/20 text-white placeholder-indigo-200 outline-none h-48 resize-none text-lg"></textarea>
+                    class="w-full p-4 md:p-8 rounded-2xl md:rounded-3xl bg-white/10 border border-white/20 text-white placeholder-indigo-200 outline-none h-36 md:h-48 resize-none text-base md:text-lg"></textarea>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 md:mt-8">
                     <button id="chatgpt-btn" onclick="handleChatGPT()"
                         class="bg-emerald-500 text-white py-5 rounded-3xl font-black tracking-widest uppercase text-sm hover:bg-emerald-400 transition-all shadow-xl flex items-center justify-center gap-3">
                         <i data-lucide="external-link" class="w-5 h-5"></i> Generate via ChatGPT
