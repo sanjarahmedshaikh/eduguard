@@ -181,7 +181,7 @@
 
         function logout() {
             sessionStorage.clear();
-            safeNavigate('login.html');
+            safeNavigate('index.html');
         }
 
         function formatDate(dateString) {
@@ -203,7 +203,7 @@
             document.getElementById('profile-name').innerText = user.name;
             document.getElementById('profile-avatar').innerText = user.name.charAt(0).toUpperCase();
         } else {
-            safeNavigate('login.html');
+            safeNavigate('index.html');
             document.getElementById('profile-name').innerText = 'Guest (Preview)';
             document.getElementById('profile-avatar').innerText = 'G';
         }

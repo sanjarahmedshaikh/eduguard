@@ -139,7 +139,7 @@
         let availableExams = [];
 
         if (!user || user.role !== 'student') {
-            safeNavigate('login.html');
+            safeNavigate('index.html');
             document.getElementById('greet-name').innerText = `Hello, Guest (Preview)`;
             document.getElementById('profile-name-sidebar').innerText = 'Guest (Preview)';
             document.getElementById('profile-avatar').innerText = 'G';
