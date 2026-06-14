@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Exam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex">
+    <div id="toast-root"></div>
+
+    <!-- Sidebar -->
+    <div
+        class="fixed bottom-0 left-0 w-full h-16 bg-white border-t flex items-center justify-around md:relative md:w-72 md:h-screen md:border-r border-gray-100 md:flex-col md:justify-start md:pt-10 z-50">
+        <div class="hidden md:block mb-10 px-8 w-full">
+            <h1 class="text-3xl font-black text-indigo-600 flex items-center gap-3"><i data-lucide="shield-alert"
+                    class="w-8 h-8"></i> EduGuard</h1>
+            <div class="flex items-center gap-2 mt-4 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 w-max">
+                <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
+                <p class="text-[10px] text-gray-600 uppercase tracking-widest font-black">TEACHER MODE</p>
+            </div>
+        </div>
+
+        <div class="flex w-full md:flex-col md:gap-3 md:px-6">
+            <button onclick="safeNavigate('teacher-dashboard.html')"
+                class="flex flex-col md:flex-row items-center gap-4 px-5 py-3.5 rounded-2xl md:w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold"><i
+                    data-lucide="layout-dashboard" class="w-[22px] h-[22px]"></i> <span
+                    class="text-[10px] md:text-sm tracking-wide">Dashboard</span></button>
+            <button onclick="safeNavigate('create-exam.html')"
+                class="flex flex-col md:flex-row items-center gap-4 px-5 py-3.5 rounded-2xl md:w-full transition-all text-indigo-700 bg-indigo-50/80 font-black shadow-sm border border-indigo-100"><i
+                    data-lucide="plus-circle" class="w-[22px] h-[22px]"></i> <span
+                    class="text-[10px] md:text-sm tracking-wide">Create Exam</span></button>
+        </div>
+
+        <!-- Profile & Sign Out Bottom Section -->
+        <div class="hidden md:flex mt-auto pb-10 w-full px-8 flex-col gap-4">
+            <div
+                class="flex items-center gap-3 text-[10px] font-black tracking-widest text-green-600 bg-green-50 px-4 py-3 rounded-xl border border-green-100 shadow-sm">
+                <i data-lucide="wifi" class="w-4 h-4"></i> SYSTEM ONLINE
+            </div>
+
+            <div class="flex flex-col gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <div id="profile-avatar"
+                        class="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center font-black flex-shrink-0 text-lg border border-indigo-200">
+                        U
+                    </div>
+                    <div class="flex-1 overflow-hidden">
+                        <p id="profile-name" class="font-black text-sm text-gray-900 truncate leading-tight">Loading...
+                        </p>
+                        <p class="text-[10px] text-gray-500 font-bold tracking-widest uppercase truncate mt-0.5">Teacher
+                        </p>
+                    </div>
+                </div>
+                <button onclick="showToast('Profile interface would open here in the full app.')"
+                    class="w-full py-2.5 bg-white border border-gray-200 text-xs font-black tracking-widest uppercase text-gray-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all rounded-xl shadow-sm active:scale-95">
+                    View Profile
+                </button>
+            </div>
+
+            <button onclick="logout()"
+                class="flex items-center gap-3 px-4 py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-all font-bold w-full group">
+                <i data-lucide="log-out" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> Sign Out
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 relative h-screen overflow-y-auto w-full p-6 md:p-10 pb-24 max-w-4xl mx-auto">
+        <h2 class="text-4xl md:text-5xl font-black mb-10 text-gray-900 tracking-tight text-center">Design Assessment
+        </h2>
+
+        <div class="space-y-8">
+            <section class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-xl border border-gray-100 relative">
+                <div class="grid grid-cols-1 gap-8">
+                    <div><label class="block text-xs font-black text-gray-400 uppercase mb-3">Examination
+                            Title</label><input id="ex-title" type="text" placeholder="e.g. Advanced Biology"
+                            class="w-full p-5 border-2 rounded-2xl outline-none focus:border-indigo-400 font-black text-xl bg-gray-50" />
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div><label class="block text-xs font-black text-gray-400 uppercase mb-3">Time Limit
+                                (Mins)</label><input id="ex-dur" type="number" value="20" min="1"
+                                class="w-full p-5 border-2 rounded-2xl outline-none font-black text-xl bg-gray-50" />
+                        </div>
+                        <div><label class="block text-xs font-black text-gray-400 uppercase mb-3">No. of
+                                Questions</label><input id="ex-count" type="number" value="5" min="1" max="50"
+                                class="w-full p-5 border-2 rounded-2xl outline-none font-black text-xl bg-gray-50" />
+                        </div>
+                        <div><label class="block text-xs font-black text-gray-400 uppercase mb-3">Difficulty</label>
+                            <select id="ex-diff"
+                                class="w-full p-5 border-2 rounded-2xl outline-none font-black text-xl bg-gray-50 text-gray-700">
+                                <option value="Easy">Easy</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="Hard">Hard</option>
+                            </select>
+                        </div>
+                        <div><label class="block text-[10px] font-black text-gray-400 uppercase mb-3">Valid
+                                Until</label><input id="ex-valid" type="datetime-local"
+                                class="w-full p-5 border-2 rounded-2xl outline-none font-bold text-sm bg-gray-50" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section
+                class="bg-gradient-to-br from-indigo-600 to-indigo-900 p-8 md:p-10 rounded-[2.5rem] shadow-2xl text-white">
+                <h3 class="font-black text-3xl mb-2">Content Engine</h3>
+                <p class="text-indigo-200 text-sm md:text-base font-medium mb-6">If API limits are high, use Direct AI.
+                    Otherwise, use ChatGPT for free unlimited generation.</p>
+
+                <textarea id="ex-topic"
+                    placeholder="Paste syllabus or topic details here (Required for AI generation AND for Anti-Cheat penalties)..."
+                    class="w-full p-8 rounded-3xl bg-white/10 border border-white/20 text-white placeholder-indigo-200 outline-none h-48 resize-none text-lg"></textarea>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                    <button id="chatgpt-btn" onclick="handleChatGPT()"
+                        class="bg-emerald-500 text-white py-5 rounded-3xl font-black tracking-widest uppercase text-sm hover:bg-emerald-400 transition-all shadow-xl flex items-center justify-center gap-3">
+                        <i data-lucide="external-link" class="w-5 h-5"></i> Generate via ChatGPT
+                    </button>
+                    <button onclick="handleManualCreate()"
+                        class="bg-indigo-800 text-white border-2 border-indigo-400 py-5 rounded-3xl font-black tracking-widest uppercase text-sm hover:bg-indigo-700 transition-all shadow-xl">Create
+                        Blank Canvas</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // --- Core Utility & Auth Logic (Restored) ---
+        function showToast(msg) {
+            const toastRoot = document.getElementById('toast-root');
+            if (toastRoot) {
+                toastRoot.innerHTML = `<div class="fixed top-6 right-6 z-[9999] p-4 rounded-2xl shadow-2xl bg-gray-900 text-white text-sm font-semibold">${msg}</div>`;
+                setTimeout(() => toastRoot.innerHTML = '', 3000);
+            } else {
+                alert(msg);
+            }
+        }
+
+        function safeNavigate(url) {
+            try {
+                window.location.href = url;
+            } catch (e) {
+                console.warn(`Navigation to ${url} blocked by preview sandbox.`);
+                showToast(`Navigation to ${url} blocked in preview. Please run locally.`);
+            }
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            safeNavigate('login.html');
+        }
+
+        const API_BASE = "http://localhost:5500/api";
+        const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
+
+        if (!user || user.role !== 'teacher') {
+            safeNavigate('login.html');
+            document.getElementById('profile-name').innerText = 'Guest (Preview)';
+            document.getElementById('profile-avatar').innerText = 'G';
+        } else {
+            document.getElementById('profile-name').innerText = user.name;
+            document.getElementById('profile-avatar').innerText = user.name.charAt(0).toUpperCase();
+        }
+
+        function setMinDateTime(inputId) {
+            const input = document.getElementById(inputId);
+            if (input) {
+                const now = new Date();
+                // Format: YYYY-MM-DDThh:mm
+                const offset = now.getTimezoneOffset();
+                const localNow = new Date(now.getTime() - (offset * 60 * 1000));
+                input.min = localNow.toISOString().slice(0, 16);
+            }
+        }
+
+        setMinDateTime('ex-valid');
+        lucide.createIcons();
+
+        // --- Exam Generation Methods ---
+
+        function handleChatGPT() {
+            const topic = document.getElementById('ex-topic').value;
+            const count = document.getElementById('ex-count').value;
+            const title = document.getElementById('ex-title').value;
+            const duration = document.getElementById('ex-dur').value;
+            const validUntil = document.getElementById('ex-valid').value;
+            const difficulty = document.getElementById('ex-diff').value;
+
+            if (!topic || !title) return showToast("Examination Title and Topic are required.");
+            if (!validUntil) return showToast("Due Date (Valid Until) is required.", "error");
+
+            // Create the prompt for the user to copy/paste or just use in the URL
+            const prompt = `Create ${count} multiple-choice questions about "${topic}" AND create exactly 3 separate unique questions about the same topic to be used as anti-cheat penalty questions.
+Information restriction: The difficulty level of ALL questions must be firmly set to ${difficulty}. 
+
+Format your response EXACTLY as a JSON object with this structure: 
+{ 
+  "questions": [{ "q": "Question text", "options": ["A", "B", "C", "D"], "correctIndex": 0 }],
+  "penaltyQuestions": [{ "q": "Penalty Question text", "options": ["A", "B", "C", "D"], "correctIndex": 0 }]
+}
+
+CRITICAL: You MUST wrap the entire JSON output inside a single markdown code block (using \`\`\`json and \`\`\`) so I can easily use the 'Copy code' button. Do not add any conversational text before or after the code block.`;
+
+            // Open ChatGPT with the prompt
+            const chatUrl = `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`;
+            window.open(chatUrl, '_blank');
+
+            // Set up the pending exam state so review page knows to ask for the paste
+            const pendingExam = {
+                title,
+                topic,
+                difficulty,
+                duration: duration || 20,
+                validUntil,
+                passGrade: 40,
+                isManual: true,
+                questions: [],
+                penaltyQuestions: [],
+                awaitingPaste: true
+            };
+            sessionStorage.setItem('pendingExam', JSON.stringify(pendingExam));
+
+            showToast("Opening ChatGPT. Copy the JSON result and return here.");
+            setTimeout(() => safeNavigate('review-exam.html'), 2000);
+        }
+
+        function handleManualCreate() {
+            const title = document.getElementById('ex-title').value;
+            const topic = document.getElementById('ex-topic').value;
+            const duration = document.getElementById('ex-dur').value;
+            const validUntil = document.getElementById('ex-valid').value;
+            const difficulty = document.getElementById('ex-diff').value;
+
+            // Enforce topic requirement for manual exams too so anti-cheat AI works
+            if (!title || !topic) {
+                return showToast("Examination Title and Topic are required. (Topic is used for AI anti-cheat)");
+            }
+            if (!validUntil) return showToast("Due Date (Valid Until) is required.", "error");
+
+            const pendingExam = {
+                title,
+                topic,
+                difficulty,
+                duration: duration || 20,
+                validUntil,
+                passGrade: 40,
+                isManual: true,
+                questions: [],
+                penaltyQuestions: []
+            };
+
+            sessionStorage.setItem('pendingExam', JSON.stringify(pendingExam));
+            safeNavigate('review-exam.html');
+        }
+    </script>
+</body>
+
+</html>
