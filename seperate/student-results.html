@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,46 +8,61 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex">
     <div id="toast-root"></div>
-    
+
     <!-- Sidebar -->
-    <div class="fixed bottom-0 left-0 w-full h-16 bg-white border-t flex items-center justify-around md:relative md:w-72 md:h-screen md:border-r border-gray-100 md:flex-col md:justify-start md:pt-10 z-50">
+    <div
+        class="fixed bottom-0 left-0 w-full h-16 bg-white border-t flex items-center justify-around md:relative md:w-72 md:h-screen md:border-r border-gray-100 md:flex-col md:justify-start md:pt-10 z-50">
         <div class="hidden md:block mb-10 px-8 w-full">
-            <h1 class="text-3xl font-black text-indigo-600 flex items-center gap-3"><i data-lucide="shield-alert" class="w-8 h-8"></i> EduGuard</h1>
+            <h1 class="text-3xl font-black text-indigo-600 flex items-center gap-3"><i data-lucide="shield-alert"
+                    class="w-8 h-8"></i> EduGuard</h1>
             <div class="flex items-center gap-2 mt-4 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 w-max">
                 <div class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></div>
                 <p class="text-[10px] text-gray-600 uppercase tracking-widest font-black">STUDENT MODE</p>
             </div>
         </div>
-        
+
         <div class="flex w-full md:flex-col md:gap-3 md:px-6">
-            <button onclick="safeNavigate('student-dashboard.html')" class="flex flex-col md:flex-row items-center gap-4 px-5 py-3.5 rounded-2xl md:w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold"><i data-lucide="book-open" class="w-[22px] h-[22px]"></i> <span class="text-[10px] md:text-sm tracking-wide">Assessments</span></button>
-            <button onclick="safeNavigate('student-results.html')" class="flex flex-col md:flex-row items-center gap-4 px-5 py-3.5 rounded-2xl md:w-full transition-all text-orange-700 bg-orange-50/80 font-black shadow-sm border border-orange-100"><i data-lucide="history" class="w-[22px] h-[22px]"></i> <span class="text-[10px] md:text-sm tracking-wide">My History</span></button>
+            <button onclick="safeNavigate('student-dashboard.html')"
+                class="flex flex-col md:flex-row items-center gap-4 px-5 py-3.5 rounded-2xl md:w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold"><i
+                    data-lucide="book-open" class="w-[22px] h-[22px]"></i> <span
+                    class="text-[10px] md:text-sm tracking-wide">Assessments</span></button>
+            <button onclick="safeNavigate('student-results.html')"
+                class="flex flex-col md:flex-row items-center gap-4 px-5 py-3.5 rounded-2xl md:w-full transition-all text-orange-700 bg-orange-50/80 font-black shadow-sm border border-orange-100"><i
+                    data-lucide="history" class="w-[22px] h-[22px]"></i> <span
+                    class="text-[10px] md:text-sm tracking-wide">My History</span></button>
         </div>
 
         <!-- Profile & Sign Out Bottom Section -->
         <div class="hidden md:flex mt-auto pb-10 w-full px-8 flex-col gap-4">
-            <div class="flex items-center gap-3 text-[10px] font-black tracking-widest text-green-600 bg-green-50 px-4 py-3 rounded-xl border border-green-100 shadow-sm">
+            <div
+                class="flex items-center gap-3 text-[10px] font-black tracking-widest text-green-600 bg-green-50 px-4 py-3 rounded-xl border border-green-100 shadow-sm">
                 <i data-lucide="wifi" class="w-4 h-4"></i> SYSTEM ONLINE
             </div>
-            
+
             <div class="flex flex-col gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm">
                 <div class="flex items-center gap-3 overflow-hidden">
-                    <div id="profile-avatar" class="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center font-black flex-shrink-0 text-lg border border-indigo-200">
+                    <div id="profile-avatar"
+                        class="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center font-black flex-shrink-0 text-lg border border-indigo-200">
                         U
                     </div>
                     <div class="flex-1 overflow-hidden">
-                        <p id="profile-name-sidebar" class="font-black text-sm text-gray-900 truncate leading-tight">Loading...</p>
-                        <p class="text-[10px] text-gray-500 font-bold tracking-widest uppercase truncate mt-0.5">Student</p>
+                        <p id="profile-name-sidebar" class="font-black text-sm text-gray-900 truncate leading-tight">
+                            Loading...</p>
+                        <p class="text-[10px] text-gray-500 font-bold tracking-widest uppercase truncate mt-0.5">Student
+                        </p>
                     </div>
                 </div>
-                <button onclick="showToast('Profile interface would open here in the full app.')" class="w-full py-2.5 bg-white border border-gray-200 text-xs font-black tracking-widest uppercase text-gray-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all rounded-xl shadow-sm active:scale-95">
+                <button onclick="showToast('Profile interface would open here in the full app.')"
+                    class="w-full py-2.5 bg-white border border-gray-200 text-xs font-black tracking-widest uppercase text-gray-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all rounded-xl shadow-sm active:scale-95">
                     View Profile
                 </button>
             </div>
 
-            <button onclick="logout()" class="flex items-center gap-3 px-4 py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-all font-bold w-full group">
+            <button onclick="logout()"
+                class="flex items-center gap-3 px-4 py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-all font-bold w-full group">
                 <i data-lucide="log-out" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> Sign Out
             </button>
         </div>
@@ -54,16 +70,21 @@
 
     <!-- Main Content -->
     <main class="flex-1 relative h-screen overflow-y-auto w-full p-6 md:p-10 max-w-6xl mx-auto">
-        <h2 class="text-4xl font-black tracking-tight mb-8 text-gray-900 flex items-center gap-4"><div class="bg-indigo-100 text-indigo-600 p-3 rounded-2xl"><i data-lucide="history" class="w-8 h-8"></i></div> My History</h2>
-        
+        <h2 class="text-4xl font-black tracking-tight mb-8 text-gray-900 flex items-center gap-4">
+            <div class="bg-indigo-100 text-indigo-600 p-3 rounded-2xl"><i data-lucide="history" class="w-8 h-8"></i>
+            </div> My History
+        </h2>
+
         <div class="bg-white rounded-[2.5rem] border border-gray-100 shadow-xl overflow-hidden">
             <table class="w-full text-left">
                 <thead class="bg-gray-50/80 border-b border-gray-100">
                     <tr>
                         <th class="p-6 font-black text-gray-400 text-xs tracking-widest uppercase">Assessment</th>
                         <th class="p-6 font-black text-gray-400 text-xs tracking-widest uppercase">Submitted On</th>
-                        <th class="p-6 font-black text-gray-400 text-xs tracking-widest uppercase text-center">Answered</th>
-                        <th class="p-6 font-black text-gray-400 text-xs tracking-widest uppercase text-center">Unanswered</th>
+                        <th class="p-6 font-black text-gray-400 text-xs tracking-widest uppercase text-center">Answered
+                        </th>
+                        <th class="p-6 font-black text-gray-400 text-xs tracking-widest uppercase text-center">
+                            Unanswered</th>
                     </tr>
                 </thead>
                 <tbody id="res-body" class="divide-y divide-gray-50"></tbody>
@@ -72,11 +93,11 @@
     </main>
 
     <script>
-        function showToast(msg) { 
+        function showToast(msg) {
             const toastRoot = document.getElementById('toast-root');
-            if(toastRoot) {
-                toastRoot.innerHTML = `<div class="fixed top-6 right-6 z-[9999] p-4 rounded-2xl shadow-2xl bg-gray-900 text-white text-sm font-semibold">${msg}</div>`; 
-                setTimeout(() => toastRoot.innerHTML='', 3000); 
+            if (toastRoot) {
+                toastRoot.innerHTML = `<div class="fixed top-6 right-6 z-[9999] p-4 rounded-2xl shadow-2xl bg-gray-900 text-white text-sm font-semibold">${msg}</div>`;
+                setTimeout(() => toastRoot.innerHTML = '', 3000);
             }
         }
 
@@ -94,9 +115,9 @@
             safeNavigate('login.html');
         }
 
-        const API_BASE = "http://localhost:5500/api";
+        const API_BASE = "https://eduguard-2xfk.onrender.com";
         const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
-        
+
         if (!user || user.role !== 'student') {
             safeNavigate('login.html');
             document.getElementById('profile-name-sidebar').innerText = 'Guest (Preview)';
@@ -111,21 +132,21 @@
             try {
                 const exRes = await fetch(`${API_BASE}/exams`);
                 const exams = await exRes.json();
-                
+
                 let allSubs = [];
-                for(let ex of exams) {
+                for (let ex of exams) {
                     const sRes = await fetch(`${API_BASE}/submissions/${ex._id}`);
                     const subs = await sRes.json();
                     const mySubs = subs.filter(s => s.studentId === user.id);
                     mySubs.forEach(s => s.examTitle = ex.title);
                     allSubs = [...allSubs, ...mySubs];
                 }
-                
-                allSubs.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+                allSubs.sort((a, b) => new Date(b.date) - new Date(a.date));
                 document.getElementById('res-body').innerHTML = allSubs.length === 0 ? `<tr><td colspan="4" class="p-10 text-center text-gray-500 font-medium">No past attempts.</td></tr>` : allSubs.map(res => {
                     let answeredCount = 0;
                     let unansweredCount = 0;
-                    
+
                     if (res.details && res.details.length > 0) {
                         res.details.forEach(d => {
                             if (d.studentAnswerIndex !== null && d.studentAnswerIndex !== undefined) {
@@ -135,10 +156,10 @@
                             }
                         });
                     }
-                    
-                    const submitDate = new Date(res.date).toLocaleDateString('en-US', { 
-                        year: 'numeric', month: 'short', day: 'numeric', 
-                        hour: '2-digit', minute: '2-digit' 
+
+                    const submitDate = new Date(res.date).toLocaleDateString('en-US', {
+                        year: 'numeric', month: 'short', day: 'numeric',
+                        hour: '2-digit', minute: '2-digit'
                     });
 
                     return `
@@ -154,9 +175,10 @@
                 showToast("Failed to connect to the backend server.");
             }
         }
-        
+
         // Render static icons on page load
         lucide.createIcons();
     </script>
 </body>
+
 </html>
