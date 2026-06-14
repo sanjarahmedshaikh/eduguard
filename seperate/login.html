@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduGuard - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .animate-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .slide-in-from-top-5 {
+            animation: slideInTop 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInTop {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex">
+    <div id="toast-root"></div>
+    <main class="flex-1 relative h-screen overflow-hidden">
+        <div class="min-h-screen bg-gray-50 flex w-full items-center justify-center p-4">
+            <div
+                class="max-w-5xl w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-gray-100 animate-in slide-in-from-top-5">
+                <div
+                    class="md:w-5/12 bg-gradient-to-br from-indigo-600 to-indigo-800 p-12 text-white flex flex-col justify-center relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div
+                            class="bg-white/20 w-20 h-20 rounded-2xl flex items-center justify-center mb-8 backdrop-blur-md shadow-inner border border-white/20">
+                            <i data-lucide="shield-alert" class="w-10 h-10 text-white drop-shadow-md"></i>
+                        </div>
+                        <h1 class="text-5xl font-black mb-4 tracking-tight drop-shadow-sm">EduGuard</h1>
+                        <p class="text-indigo-100 text-lg font-medium leading-relaxed">The secure, AI-powered
+                            examination platform designed for modern education integrity.</p>
+                    </div>
+                    <div class="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+                </div>
+
+                <div id="auth-panel" class="md:w-7/12 p-10 md:p-14 flex flex-col justify-center bg-white relative">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE = "http://localhost:5500/api";
+        let state = { authMode: 'login', authRoleSelection: 'student', isConnecting: false };
+
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast-root');
+            t.innerHTML = `<div class="fixed top-6 right-6 z-[9999] p-4 rounded-2xl shadow-2xl flex items-center gap-3 animate-in slide-in-from-top-5 duration-300 border border-white/10 ${type === 'error' ? 'bg-red-600' : 'bg-gray-900'} text-white"><span class="font-semibold text-sm tracking-wide">${msg}</span></div>`;
+            setTimeout(() => t.innerHTML = '', 4000);
+        }
+
+        async function handleAuthSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('auth-id').value;
+            const pass = document.getElementById('auth-pass').value;
+            const name = document.getElementById('auth-name') ? document.getElementById('auth-name').value : '';
+
+            if (!id || !pass || (state.authMode === 'register' && !name)) return showToast("Please fill all fields", "error");
+
+            state.isConnecting = true; updateView();
+            try {
+                const endpoint = state.authMode === 'login' ? '/login' : '/register';
+                const payload = { role: state.authRoleSelection, id, password: pass, name };
+
+                const res = await fetch(`${API_BASE}${endpoint}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Authentication failed');
+
+                if (state.authMode === 'register') {
+                    showToast("Registration successful! Please log in.");
+                    state.authMode = 'login'; updateView();
+                } else {
+                    sessionStorage.setItem('eduguard_user', JSON.stringify(data.user));
+                    window.location.href = data.user.role === 'teacher' ? 'teacher-dashboard.html' : 'student-dashboard.html';
+                }
+            } catch (err) { showToast(err.message, "error"); }
+            finally { state.isConnecting = false; updateView(); }
+        }
+
+        function updateView() {
+            document.getElementById('auth-panel').innerHTML = `
+                <div class="flex bg-gray-100 p-1.5 rounded-2xl mb-8">
+                    <button onclick="state.authRoleSelection='student'; updateView();" class="flex-1 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${state.authRoleSelection === 'student' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}"><i data-lucide="graduation-cap" class="w-[18px] h-[18px]"></i> Student</button>
+                    <button onclick="state.authRoleSelection='teacher'; updateView();" class="flex-1 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 ${state.authRoleSelection === 'teacher' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}"><i data-lucide="user" class="w-[18px] h-[18px]"></i> Teacher</button>
+                </div>
+                <h2 class="text-3xl font-black text-gray-900 mb-2 tracking-tight">${state.authMode === 'login' ? 'Welcome Back' : 'Create Account'}</h2>
+                <p class="text-gray-500 mb-8 font-medium">${state.authMode === 'login' ? 'Enter credentials to access portal.' : 'Register to get started.'}</p>
+                <form onsubmit="handleAuthSubmit(event)" class="space-y-5">
+                    ${state.authMode === 'register' ? `
+                        <div><label class="block text-xs font-black text-gray-400 uppercase mb-2 tracking-widest pl-1">Full Name</label>
+                        <input id="auth-name" type="text" required class="w-full px-4 py-4 border-2 rounded-2xl outline-none focus:ring-4 focus:ring-indigo-100 bg-gray-50 border-gray-100 focus:border-indigo-400 font-bold text-gray-800" /></div>
+                    ` : ''}
+                    <div><label class="block text-xs font-black text-gray-400 uppercase mb-2 tracking-widest pl-1">${state.authRoleSelection === 'teacher' ? 'Teacher ID' : 'Student ID'}</label>
+                    <input id="auth-id" type="text" required class="w-full px-4 py-4 border-2 rounded-2xl outline-none focus:ring-4 focus:ring-indigo-100 bg-gray-50 border-gray-100 focus:border-indigo-400 font-bold text-gray-800" /></div>
+                    <div><label class="block text-xs font-black text-gray-400 uppercase mb-2 tracking-widest pl-1">Password</label>
+                    <input id="auth-pass" type="password" required class="w-full px-4 py-4 border-2 rounded-2xl outline-none focus:ring-4 focus:ring-indigo-100 bg-gray-50 border-gray-100 focus:border-indigo-400 font-bold text-gray-800" /></div>
+                    <button type="submit" ${state.isConnecting ? 'disabled' : ''} class="w-full mt-4 bg-indigo-600 text-white py-4 rounded-2xl font-black tracking-widest uppercase text-sm hover:bg-indigo-700 transition-all shadow-lg active:scale-[0.98] disabled:opacity-70">${state.isConnecting ? 'CONNECTING...' : (state.authMode === 'login' ? 'SIGN IN' : 'REGISTER')}</button>
+                </form>
+                <div class="mt-8 text-center"><p class="text-gray-500 font-medium">${state.authMode === 'login' ? "Don't have an account? " : "Already have an account? "}<button onclick="state.authMode='${state.authMode === 'login' ? 'register' : 'login'}'; updateView();" class="text-indigo-600 font-black hover:underline">${state.authMode === 'login' ? 'Register Now' : 'Sign In Here'}</button></p></div>
+            `;
+            lucide.createIcons();
+        }
+        updateView();
+    </script>
+</body>
+
+</html>

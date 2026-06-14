@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex">
+    <div id="toast-root"></div>
+
+    <!-- Sidebar -->
+    <div
+        class="fixed bottom-0 left-0 w-full h-16 bg-white border-t flex items-center justify-around md:relative md:w-72 md:h-screen md:border-r border-gray-100 md:flex-col md:justify-start md:pt-10 z-50">
+        <div class="hidden md:block mb-10 px-8 w-full">
+            <h1 class="text-3xl font-black text-indigo-600 flex items-center gap-3"><i data-lucide="shield-alert"
+                    class="w-8 h-8"></i> EduGuard</h1>
+            <div class="flex items-center gap-2 mt-4 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 w-max">
+                <div class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></div>
+                <p class="text-[10px] text-gray-600 uppercase tracking-widest font-black">STUDENT MODE</p>
+            </div>
+        </div>
+
+        <div class="flex w-full md:flex-col md:gap-3 md:px-6">
+            <button onclick="safeNavigate('student-dashboard.html')"
+                class="flex flex-col md:flex-row items-center gap-4 px-5 py-3.5 rounded-2xl md:w-full transition-all text-orange-700 bg-orange-50/80 font-black shadow-sm border border-orange-100"><i
+                    data-lucide="book-open" class="w-[22px] h-[22px]"></i> <span
+                    class="text-[10px] md:text-sm tracking-wide">Assessments</span></button>
+            <button onclick="safeNavigate('student-results.html')"
+                class="flex flex-col md:flex-row items-center gap-4 px-5 py-3.5 rounded-2xl md:w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold"><i
+                    data-lucide="history" class="w-[22px] h-[22px]"></i> <span
+                    class="text-[10px] md:text-sm tracking-wide">My History</span></button>
+        </div>
+
+        <!-- Profile & Sign Out Bottom Section -->
+        <div class="hidden md:flex mt-auto pb-10 w-full px-8 flex-col gap-4">
+            <div
+                class="flex items-center gap-3 text-[10px] font-black tracking-widest text-green-600 bg-green-50 px-4 py-3 rounded-xl border border-green-100 shadow-sm">
+                <i data-lucide="wifi" class="w-4 h-4"></i> SYSTEM ONLINE
+            </div>
+
+            <div class="flex flex-col gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <div id="profile-avatar"
+                        class="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center font-black flex-shrink-0 text-lg border border-indigo-200">
+                        U
+                    </div>
+                    <div class="flex-1 overflow-hidden">
+                        <p id="profile-name-sidebar" class="font-black text-sm text-gray-900 truncate leading-tight">
+                            Loading...</p>
+                        <p class="text-[10px] text-gray-500 font-bold tracking-widest uppercase truncate mt-0.5">Student
+                        </p>
+                    </div>
+                </div>
+                <button onclick="showToast('Profile interface would open here in the full app.')"
+                    class="w-full py-2.5 bg-white border border-gray-200 text-xs font-black tracking-widest uppercase text-gray-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all rounded-xl shadow-sm active:scale-95">
+                    View Profile
+                </button>
+            </div>
+
+            <button onclick="logout()"
+                class="flex items-center gap-3 px-4 py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-all font-bold w-full group">
+                <i data-lucide="log-out" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> Sign Out
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 relative h-screen overflow-y-auto w-full p-6 md:p-10 pb-24 max-w-7xl mx-auto">
+        <header
+            class="flex flex-col md:flex-row md:justify-between md:items-center gap-6 bg-gradient-to-br from-indigo-600 to-indigo-900 p-10 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden mb-8">
+            <div class="relative z-10">
+                <p
+                    class="text-indigo-300 font-black tracking-[0.2em] text-[10px] uppercase mb-3 bg-white/10 w-fit px-3 py-1 rounded-full border border-white/20">
+                    Student Portal</p>
+                <h2 id="greet-name" class="text-4xl md:text-5xl font-black tracking-tight mb-3">Hello</h2>
+                <p class="text-indigo-100 font-medium text-lg md:text-xl">Ready to test your knowledge?</p>
+            </div>
+
+            <div class="relative z-10 md:self-start">
+                <button onclick="fetchExams()" id="refresh-btn"
+                    class="p-4 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-2xl text-white transition-all active:scale-95 shadow-lg flex items-center justify-center"
+                    title="Refresh Assessments">
+                    <div id="refresh-icon-wrapper" class="transition-transform duration-500">
+                        <i data-lucide="refresh-ccw" class="w-6 h-6"></i>
+                    </div>
+                </button>
+            </div>
+
+            <div class="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+        </header>
+
+        <h3 class="font-black text-2xl text-gray-800 mb-8 flex items-center gap-3 tracking-tight">
+            <div class="p-2 bg-indigo-100 text-indigo-600 rounded-xl"><i data-lucide="book-open" class="w-6 h-6"></i>
+            </div> Available Assessments
+        </h3>
+        <div id="exam-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    </main>
+
+    <script>
+        function showToast(msg, type = 'success') {
+            const toastRoot = document.getElementById('toast-root');
+            if (toastRoot) {
+                toastRoot.innerHTML = `<div class="fixed top-6 right-6 z-[9999] p-4 rounded-2xl shadow-2xl ${type === 'error' ? 'bg-red-600' : 'bg-gray-900'} text-white text-sm font-semibold">${msg}</div>`;
+                setTimeout(() => toastRoot.innerHTML = '', 3000);
+            }
+        }
+
+        function safeNavigate(url) {
+            try {
+                window.location.href = url;
+            } catch (e) {
+                console.warn(`Navigation to ${url} blocked by preview sandbox.`);
+                showToast(`Navigation to ${url} blocked in preview. Please run locally.`);
+            }
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            safeNavigate('login.html');
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return "";
+            try {
+                const d = new Date(dateString);
+                if (isNaN(d.getTime())) return "";
+                return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+            } catch (e) {
+                return "";
+            }
+        }
+
+        const API_BASE = "http://localhost:5500/api";
+        const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
+        let availableExams = [];
+
+        if (!user || user.role !== 'student') {
+            safeNavigate('login.html');
+            document.getElementById('greet-name').innerText = `Hello, Guest (Preview)`;
+            document.getElementById('profile-name-sidebar').innerText = 'Guest (Preview)';
+            document.getElementById('profile-avatar').innerText = 'G';
+        } else {
+            document.getElementById('greet-name').innerText = `Hello, ${user.name}`;
+            document.getElementById('profile-name-sidebar').innerText = user.name;
+            document.getElementById('profile-avatar').innerText = user.name.charAt(0).toUpperCase();
+        }
+
+        async function fetchExams() {
+            const refreshBtn = document.getElementById('refresh-btn');
+            const iconWrapper = document.getElementById('refresh-icon-wrapper');
+
+            // Disable button and add rotation class
+            if (refreshBtn) refreshBtn.disabled = true;
+            if (iconWrapper) iconWrapper.classList.add('animate-spin');
+
+            try {
+                const res = await fetch(`${API_BASE}/exams`);
+                if (!res.ok) throw new Error("Server responded with an error");
+
+                const allExams = await res.json();
+                const now = new Date();
+
+                // Robust filtering logic
+                availableExams = allExams.filter(e => {
+                    // Only show published exams
+                    if (e.status !== 'Published') return false;
+
+                    const isExpired = e.validUntil && (new Date(e.validUntil) < now);
+
+                    // ONLY hide if the teacher explicitly marked it as hidden (false)
+                    // If undefined (older exams), default is to keep it visible
+                    if (isExpired && (e.showExpiredToStudents === false || String(e.showExpiredToStudents) === 'false')) {
+                        return false;
+                    }
+
+                    return true;
+                });
+
+                document.getElementById('exam-grid').innerHTML = availableExams.length === 0 ? `<p class="col-span-full p-10 text-gray-500 font-bold">No active assessments available.</p>` : availableExams.map(e => {
+                    const isExpired = e.validUntil && (new Date(e.validUntil) < now);
+
+                    return `
+                    <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm flex flex-col h-full group ${isExpired ? 'opacity-80 grayscale-[30%]' : ''}">
+                        <h4 class="font-black text-2xl text-gray-900 mb-3 leading-tight flex-1">${e.title}</h4>
+                        <div class="space-y-3 mb-8">
+                            <p class="text-sm font-bold text-gray-500 flex items-center gap-2 bg-gray-50 w-fit px-3 py-1.5 rounded-lg border border-gray-100"><i data-lucide="timer" class="w-4 h-4 text-gray-400"></i> ${e.duration} Minutes</p>
+                            ${e.validUntil ? `
+                                <p class="text-xs font-bold ${isExpired ? 'text-red-700 bg-red-50 border-red-200' : 'text-orange-700 bg-orange-50 border-orange-200'} flex items-center gap-2 w-fit px-3 py-1.5 rounded-lg border shadow-sm">
+                                    <i data-lucide="${isExpired ? 'alert-circle' : 'calendar'}" class="w-3.5 h-3.5"></i> ${isExpired ? 'Expired:' : 'Due:'} ${formatDate(e.validUntil)}
+                                </p>
+                            ` : ''}
+                        </div>
+                        <button onclick="${isExpired ? `showToast('This exam has been expired.', 'error')` : `startExam('${e._id}')`}" class="w-full py-4 ${isExpired ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-gray-900 text-white hover:bg-indigo-600 active:scale-95'} rounded-2xl font-black tracking-widest uppercase text-sm transition-all flex items-center justify-center gap-2">
+                            ${isExpired ? `<i data-lucide="lock" class="w-4 h-4"></i> Expired` : `Start Now`}
+                        </button>
+                    </div>
+                `}).join('');
+
+                lucide.createIcons();
+
+            } catch (error) {
+                showToast("Failed to fetch exams. Is the server running?", "error");
+                console.error(error);
+                // Clear the grid to avoid showing stale data on error
+                document.getElementById('exam-grid').innerHTML = `<p class="col-span-full p-10 text-red-500 font-bold text-center">Unable to load assessments. Please try again later.</p>`;
+            } finally {
+                // Remove the rotation class safely without timeouts to prevent getting stuck
+                if (iconWrapper) iconWrapper.classList.remove('animate-spin');
+                if (refreshBtn) refreshBtn.disabled = false;
+            }
+        }
+
+        function startExam(id) {
+            const exam = availableExams.find(e => e._id === id || e.id === id);
+
+            if (exam && exam.validUntil) {
+                const expiryDate = new Date(exam.validUntil);
+                if (new Date() > expiryDate) {
+                    showToast("This exam has been expired.", "error");
+                    return fetchExams();
+                }
+            }
+
+            sessionStorage.setItem('active_exam_id', id);
+            
+            // Open in a new popup window without navigation controls
+            const windowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,width=" + screen.width + ",height=" + screen.height;
+            window.open('student-exam.html', '_blank', windowFeatures);
+            
+            // Optional: Show a message on the dashboard that the exam is running in a popup
+            showToast("Exam started in a new secure window.", "success");
+        }
+
+        // Initialize static icons immediately on page load
+        lucide.createIcons();
+
+        // Fetch dynamic data
+        fetchExams();
+    </script>
+</body>
+
+</html>

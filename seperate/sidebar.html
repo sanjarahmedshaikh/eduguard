@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduGuard - Sidebar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex">
+    <div id="sidebar-root" class="z-50 h-full">
+        <div class="fixed bottom-0 left-0 w-full h-16 bg-white border-t flex items-center justify-around md:relative md:w-72 md:h-screen md:border-r border-gray-100 md:flex-col md:justify-start md:pt-10 z-50 shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.05)] md:shadow-none">
+            <div class="hidden md:block mb-10 px-8 w-full">
+                <h1 class="text-3xl font-black text-indigo-600 flex items-center gap-3 tracking-tight">
+                    <i data-lucide="shield-alert" class="w-8 h-8"></i> EduGuard
+                </h1>
+                <div class="flex items-center gap-2 mt-4 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 w-max">
+                    <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
+                    <p class="text-[10px] text-gray-600 uppercase tracking-widest font-black">TEACHER MODE</p>
+                </div>
+            </div>
+            
+            <div class="flex w-full md:flex-col md:gap-3 md:px-6">
+                <!-- Active Link Example -->
+                <button class="flex flex-col md:flex-row items-center gap-4 px-5 py-3.5 rounded-2xl md:w-full transition-all text-indigo-700 bg-indigo-50/80 font-black shadow-sm border border-indigo-100">
+                    <i data-lucide="layout-dashboard" class="w-[22px] h-[22px]"></i> <span class="text-[10px] md:text-sm tracking-wide">Dashboard</span>
+                </button>
+                <!-- Inactive Link Example -->
+                <button class="flex flex-col md:flex-row items-center gap-4 px-5 py-3.5 rounded-2xl md:w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold">
+                    <i data-lucide="plus-circle" class="w-[22px] h-[22px]"></i> <span class="text-[10px] md:text-sm tracking-wide">Create Exam</span>
+                </button>
+            </div>
+
+            <div class="hidden md:flex mt-auto pb-10 w-full px-8 flex-col gap-4">
+                <div class="flex items-center gap-3 text-[10px] font-black tracking-widest text-green-600 bg-green-50 px-4 py-3 rounded-xl border border-green-100 shadow-sm">
+                    <i data-lucide="wifi" class="w-4 h-4"></i>
+                    SYSTEM ONLINE
+                </div>
+                
+                <div class="flex flex-col gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm">
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <div class="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center font-black flex-shrink-0 text-lg border border-indigo-200">
+                            J
+                        </div>
+                        <div class="flex-1 overflow-hidden">
+                            <p class="font-black text-sm text-gray-900 truncate leading-tight">Jane Doe</p>
+                            <p class="text-[10px] text-gray-500 font-bold tracking-widest uppercase truncate mt-0.5">Teacher</p>
+                        </div>
+                    </div>
+                    <button class="w-full py-2.5 bg-white border border-gray-200 text-xs font-black tracking-widest uppercase text-gray-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all rounded-xl shadow-sm active:scale-95">
+                        View Profile
+                    </button>
+                </div>
+
+                <button class="flex items-center gap-3 px-4 py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-all font-bold w-full group">
+                    <i data-lucide="log-out" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> Sign Out
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Exam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex flex-col">
+    <div id="toast-root"></div>
+
+
+
+    <div
+        class="bg-red-600 p-2 text-white text-[10px] font-black text-center tracking-[0.3em] uppercase flex items-center justify-center gap-3 shadow-md z-20">
+        <i data-lucide="shield-alert" class="w-3.5 h-3.5 animate-pulse"></i> PROCTORING ACTIVE • ALL ACTIVITY LOGGED
+    </div>
+
+    <header class="p-4 md:p-6 flex flex-col md:flex-row justify-between items-center border-b shadow-sm bg-white z-10">
+        <span id="ex-title" class="font-black text-xl">Loading...</span>
+        <div class="flex items-center gap-3 bg-red-50 border-2 border-red-100 px-5 py-2.5 rounded-2xl shadow-sm"><i
+                data-lucide="timer" class="w-5 h-5 text-red-500 animate-pulse"></i><span id="exam-timer"
+                class="font-mono font-black text-2xl text-red-700">00:00</span></div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto max-w-5xl mx-auto w-full relative z-10 flex flex-col justify-center">
+        <h3 id="q-text" class="text-2xl md:text-3xl font-black text-gray-900 mb-8 leading-tight"></h3>
+        <div id="q-options" class="space-y-4"></div>
+    </main>
+
+    <footer class="p-4 md:p-6 border-t border-gray-200 bg-gray-50/90 backdrop-blur-2xl">
+        <div class="max-w-5xl mx-auto flex gap-4 w-full">
+            <button onclick="endExamPrompt()" id="end-btn"
+                class="flex-1 py-4 rounded-xl font-black text-gray-700 bg-gray-200 hover:bg-red-600 hover:text-white transition-all uppercase text-base tracking-[0.1em]">End Test</button>
+            <button onclick="nextQ()" id="next-btn"
+                class="flex-[2] py-4 rounded-xl font-black text-white bg-gray-900 hover:bg-black uppercase text-base tracking-[0.1em]">Next
+                Question</button>
+        </div>
+    </footer>
+
+    <script>
+        function showToast(msg, type = 'success') {
+            const toastRoot = document.getElementById('toast-root');
+            if (toastRoot) {
+                toastRoot.innerHTML = `<div class="fixed top-6 right-6 z-[9999] p-4 rounded-2xl shadow-2xl ${type === 'error' ? 'bg-red-600' : 'bg-gray-900'} text-white text-sm font-semibold">${msg}</div>`;
+                setTimeout(() => toastRoot.innerHTML = '', 3000);
+            } else {
+                alert(msg);
+            }
+        }
+
+        function safeNavigate(url) {
+            try {
+                window.location.href = url;
+            } catch (e) {
+                console.warn(`Navigation to ${url} blocked by preview sandbox.`);
+                showToast(`Navigation to ${url} blocked in preview. Please run locally.`, 'error');
+            }
+        }
+
+        const API_BASE = "http://localhost:5500/api";
+        const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
+        const examId = sessionStorage.getItem('active_exam_id');
+
+        let activeExam = null;
+        let examState = { currentQ: 0, timeLeft: 0, selectedAnswers: {}, questions: [], timerInterval: null, shuffleCount: 0, isReplacing: false };
+        let isUnloading = false;
+        window.addEventListener('beforeunload', () => { isUnloading = true; });
+
+        function saveState() {
+            sessionStorage.setItem(`exam_state_${examId}`, JSON.stringify({
+                currentQ: examState.currentQ,
+                timeLeft: examState.timeLeft,
+                selectedAnswers: examState.selectedAnswers,
+                questions: examState.questions,
+                shuffleCount: examState.shuffleCount
+            }));
+        }
+
+        if (!user || !examId) {
+            safeNavigate('student-dashboard.html');
+        } else {
+            init();
+        }
+
+        function startTimer() {
+            examState.timerInterval = setInterval(() => {
+                examState.timeLeft--;
+                document.getElementById('exam-timer').innerText = `${Math.floor(examState.timeLeft / 60)}:${(examState.timeLeft % 60).toString().padStart(2, '0')}`;
+                saveState();
+                if (examState.timeLeft <= 0) submitExam();
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(examState.timerInterval);
+        }
+
+        async function init() {
+            try {
+                const res = await fetch(`${API_BASE}/exams`);
+                const exams = await res.json();
+                activeExam = exams.find(e => e._id === examId);
+
+                if (!activeExam) {
+                    showToast("Exam not found.", "error");
+                    safeNavigate('student-dashboard.html');
+                    return;
+                }
+
+                document.getElementById('ex-title').innerText = activeExam.title;
+                
+                const savedState = sessionStorage.getItem(`exam_state_${examId}`);
+                if (savedState) {
+                    const parsedState = JSON.parse(savedState);
+                    examState.currentQ = parsedState.currentQ || 0;
+                    examState.timeLeft = parsedState.timeLeft || (activeExam.duration * 60);
+                    examState.selectedAnswers = parsedState.selectedAnswers || {};
+                    examState.questions = parsedState.questions || JSON.parse(JSON.stringify(activeExam.questions));
+                    examState.shuffleCount = parsedState.shuffleCount || 0;
+                } else {
+                    examState.questions = JSON.parse(JSON.stringify(activeExam.questions));
+                    examState.timeLeft = activeExam.duration * 60;
+                }
+
+                startTimer();
+
+                window.addEventListener('blur', handleTabSwitch);
+                document.addEventListener('visibilitychange', handleTabSwitch);
+                
+                // Prevent back button
+                history.pushState(null, null, location.href);
+                window.onpopstate = function () {
+                    history.go(1);
+                    showToast("You cannot leave the exam until it is submitted.", "error");
+                };
+                
+                document.getElementById('exam-timer').innerText = `${Math.floor(examState.timeLeft / 60)}:${(examState.timeLeft % 60).toString().padStart(2, '0')}`;
+                renderQ();
+            } catch (error) {
+                showToast("Failed to load exam data.", "error");
+            }
+        }
+
+        function renderQ() {
+            if (!examState.questions.length) return;
+            const q = examState.questions[examState.currentQ];
+            const isLast = examState.currentQ === examState.questions.length - 1;
+
+            document.getElementById('q-text').innerText = `Q${examState.currentQ + 1}. ${q.q}`;
+            document.getElementById('next-btn').innerText = isLast ? 'Submit Assessment' : 'Next Question';
+            document.getElementById('next-btn').className = `flex-1 py-4 rounded-xl font-black text-white uppercase text-base tracking-[0.1em] ${isLast ? 'bg-green-600' : 'bg-gray-900'}`;
+
+            document.getElementById('q-options').innerHTML = q.options.map((opt, i) => {
+                const sel = examState.selectedAnswers[examState.currentQ] === i;
+                return `<button onclick="setAns(${i})" class="w-full text-left p-5 rounded-2xl border-2 transition-all flex items-center gap-4 ${sel ? 'border-indigo-600 bg-indigo-50/80 ring-4 ring-indigo-50' : 'border-gray-200 bg-white hover:border-indigo-300'}"><div class="w-10 h-10 rounded-xl flex items-center justify-center font-black ${sel ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-400'}">${String.fromCharCode(65 + i)}</div><span class="font-bold text-xl ${sel ? 'text-indigo-900' : 'text-gray-700'}">${opt}</span></button>`;
+            }).join('');
+        }
+
+        function setAns(i) { examState.selectedAnswers[examState.currentQ] = i; saveState(); renderQ(); }
+
+        function nextQ() {
+            if (examState.currentQ === examState.questions.length - 1) submitExam();
+            else { examState.currentQ++; saveState(); renderQ(); }
+        }
+
+        function endExamPrompt() {
+            if (confirm("Are you sure you want to end the test? This action cannot be undone and your current answers will be submitted.")) {
+                submitExam();
+            }
+        }
+
+        async function handleTabSwitch(e) {
+            if (isUnloading) return;
+            if (examState.isReplacing || (e && e.type === 'visibilitychange' && document.visibilityState !== 'hidden')) return;
+            examState.isReplacing = true;
+            examState.shuffleCount++;
+
+            if (examState.shuffleCount > 3) {
+                stopTimer();
+                showToast("Maximum cheating attempts reached. Exam is being terminated automatically.", "error");
+                await submitExam();
+                return;
+            }
+
+            try {
+                let newQ;
+                
+                // Pull from pre-generated penalty questions using the shuffleCount as an index so it's consistent across reloads
+                if (activeExam.penaltyQuestions && activeExam.penaltyQuestions.length > 0) {
+                    const pIndex = (examState.shuffleCount - 1) % activeExam.penaltyQuestions.length;
+                    newQ = activeExam.penaltyQuestions[pIndex];
+                } else {
+                    // Safety fallback if the teacher didn't add any penalty questions
+                    newQ = {
+                        q: "Which of the following describes a key violation of examination integrity?",
+                        options: [
+                            "Navigating away from the active examination window.",
+                            "Reviewing the provided materials carefully.",
+                            "Completing the test within the allocated time.",
+                            "Answering all required questions sequentially."
+                        ],
+                        correctIndex: 0
+                    };
+                }
+
+                examState.questions[examState.currentQ] = { ...newQ, replaced: true };
+                delete examState.selectedAnswers[examState.currentQ];
+
+                saveState();
+                renderQ();
+                showToast(`TAB SWITCH DETECTED. Penalty question generated (${examState.shuffleCount}/3 warnings).`, "error");
+            } catch (e) {
+                console.error(e);
+                showToast(`Tab switch detected. Incident logged (${examState.shuffleCount}/3 warnings).`, "error");
+            } finally {
+                examState.isReplacing = false;
+            }
+        }
+
+        async function submitExam() {
+            stopTimer();
+            try {
+                // MASSIVE FIX: We stringify the entire questions array and hide it inside `answers._sq`
+                // This guarantees that even if the backend drops the `sessionQuestions` array due to a strict schema, 
+                // the question data will safely survive as a string and be visible to the teacher.
+                const safeAnswers = {
+                    ...examState.selectedAnswers,
+                    _sq: JSON.stringify(examState.questions)
+                };
+
+                await fetch(`${API_BASE}/submit`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        studentName: user.name,
+                        studentId: user.id,
+                        examId: activeExam._id,
+                        answers: safeAnswers,
+                        sessionQuestions: examState.questions, // Sent normally just in case it works for score calculation
+                        shuffleCount: examState.shuffleCount
+                    })
+                });
+            } catch (error) {
+                showToast("Submission failed to reach server.", "error");
+            }
+            sessionStorage.removeItem('active_exam_id');
+            sessionStorage.removeItem(`exam_state_${examId}`);
+            
+            // Check if we are in a popup
+            if (window.opener && !window.opener.closed) {
+                window.opener.location.href = 'student-results.html';
+                window.close();
+            } else {
+                safeNavigate('student-results.html');
+            }
+        }
+
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
