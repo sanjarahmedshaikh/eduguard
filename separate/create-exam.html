@@ -17,80 +17,74 @@
 <body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex">
     <div id="toast-root"></div>
 
-    <!-- Mobile Top Bar -->
-    <div class="fixed top-0 left-0 right-0 h-14 bg-white/95 backdrop-blur-lg border-b border-gray-100 flex items-center px-4 gap-3 z-[55] md:hidden shadow-sm">
-        <button onclick="toggleSidebar()" class="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-            <i data-lucide="menu" class="w-5 h-5 text-gray-700"></i>
-        </button>
-        <h1 class="text-lg font-black text-indigo-600 flex items-center gap-2">
-            <i data-lucide="shield-alert" class="w-5 h-5"></i> EduGuard
-        </h1>
-    </div>
-
-    <!-- Sidebar Overlay -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[45] hidden md:hidden transition-opacity" onclick="toggleSidebar()"></div>
-
     <!-- Sidebar -->
     <div id="sidebar"
-        class="fixed left-0 top-0 w-72 h-screen bg-white border-r border-gray-100 flex flex-col justify-start pt-6 z-50 -translate-x-full md:translate-x-0 md:relative transition-transform duration-300 shadow-2xl md:shadow-none overflow-y-auto flex-shrink-0">
-        <button onclick="toggleSidebar()" class="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-xl md:hidden transition-colors z-10">
-            <i data-lucide="x" class="w-5 h-5 text-gray-500"></i>
-        </button>
-        <div class="mb-10 px-8 w-full pt-2">
-            <h1 class="text-3xl font-black text-indigo-600 flex items-center gap-3"><i data-lucide="shield-alert"
-                    class="w-8 h-8"></i> EduGuard</h1>
-            <div class="flex items-center gap-2 mt-4 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 w-max">
+        class="h-screen bg-white border-r border-gray-100 flex flex-col justify-start pt-6 z-50 overflow-y-auto flex-shrink-0 w-16 md:w-72 transition-all duration-300">
+        <div class="mb-8 md:mb-10 px-2 md:px-8 w-full pt-2 flex flex-col items-center md:items-start">
+            <h1 class="text-3xl font-black text-indigo-600 flex items-center justify-center md:justify-start gap-3">
+                <i data-lucide="shield-alert" class="w-8 h-8 flex-shrink-0 text-indigo-600"></i>
+                <span class="hidden md:block">EduGuard</span>
+            </h1>
+            <div class="hidden md:flex items-center gap-2 mt-4 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 w-max">
                 <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
                 <p class="text-[10px] text-gray-600 uppercase tracking-widest font-black">TEACHER MODE</p>
             </div>
         </div>
 
-        <div class="flex flex-col gap-3 px-6 w-full">
+        <div class="flex flex-col gap-3 px-2 md:px-6 w-full items-center md:items-stretch">
             <button onclick="safeNavigate('teacher-dashboard.html')"
-                class="flex flex-row items-center gap-4 px-5 py-3.5 rounded-2xl w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold"><i
-                    data-lucide="layout-dashboard" class="w-[22px] h-[22px]"></i> <span
-                    class="text-sm tracking-wide">Dashboard</span></button>
+                class="flex flex-row items-center justify-center md:justify-start gap-4 p-3 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-12 md:w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold"
+                title="Dashboard">
+                <i data-lucide="layout-dashboard" class="w-[22px] h-[22px] flex-shrink-0"></i>
+                <span class="text-sm tracking-wide hidden md:inline">Dashboard</span>
+            </button>
             <button onclick="safeNavigate('create-exam.html')"
-                class="flex flex-row items-center gap-4 px-5 py-3.5 rounded-2xl w-full transition-all text-indigo-700 bg-indigo-50/80 font-black shadow-sm border border-indigo-100"><i
-                    data-lucide="plus-circle" class="w-[22px] h-[22px]"></i> <span
-                    class="text-sm tracking-wide">Create Exam</span></button>
+                class="flex flex-row items-center justify-center md:justify-start gap-4 p-3 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-12 md:w-full transition-all text-indigo-700 bg-indigo-50/80 font-black shadow-sm border border-indigo-100"
+                title="Create Exam">
+                <i data-lucide="plus-circle" class="w-[22px] h-[22px] flex-shrink-0"></i>
+                <span class="text-sm tracking-wide hidden md:inline">Create Exam</span>
+            </button>
         </div>
 
         <!-- Profile & Sign Out Bottom Section -->
-        <div class="flex mt-auto pb-10 w-full px-8 flex-col gap-4">
+        <div class="flex mt-auto pb-6 md:pb-10 w-full px-2 md:px-8 flex-col gap-4 items-center md:items-stretch">
             <div
-                class="flex items-center gap-3 text-[10px] font-black tracking-widest text-green-600 bg-green-50 px-4 py-3 rounded-xl border border-green-100 shadow-sm">
-                <i data-lucide="wifi" class="w-4 h-4"></i> SYSTEM ONLINE
+                class="flex items-center justify-center md:justify-start gap-3 text-[10px] font-black tracking-widest text-green-600 bg-green-50 p-3 md:px-4 md:py-3 rounded-xl border border-green-100 shadow-sm w-12 md:w-full"
+                title="System Online">
+                <i data-lucide="wifi" class="w-4 h-4 flex-shrink-0 text-green-600"></i>
+                <span class="hidden md:inline">SYSTEM ONLINE</span>
             </div>
 
-            <div class="flex flex-col gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm">
-                <div class="flex items-center gap-3 overflow-hidden">
-                    <div id="profile-avatar"
-                        class="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center font-black flex-shrink-0 text-lg border border-indigo-200">
+            <div class="flex flex-col gap-3 p-0 md:p-4 bg-transparent md:bg-gray-50 rounded-2xl border-0 md:border md:border-gray-100 md:shadow-sm w-full items-center md:items-stretch">
+                <div class="flex items-center gap-3 overflow-hidden justify-center md:justify-start">
+                    <div id="profile-avatar" onclick="showToast('Profile interface would open here in the full app.')"
+                        class="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center font-black flex-shrink-0 text-lg border border-indigo-200 cursor-pointer md:cursor-default"
+                        title="View Profile">
                         U
                     </div>
-                    <div class="flex-1 overflow-hidden">
-                        <p id="profile-name" class="font-black text-sm text-gray-900 truncate leading-tight">Loading...
-                        </p>
+                    <div class="flex-1 overflow-hidden hidden md:block">
+                        <p id="profile-name" class="font-black text-sm text-gray-900 truncate leading-tight">Loading...</p>
                         <p class="text-[10px] text-gray-500 font-bold tracking-widest uppercase truncate mt-0.5">Teacher
                         </p>
                     </div>
                 </div>
                 <button onclick="showToast('Profile interface would open here in the full app.')"
-                    class="w-full py-2.5 bg-white border border-gray-200 text-xs font-black tracking-widest uppercase text-gray-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all rounded-xl shadow-sm active:scale-95">
+                    class="hidden md:block w-full py-2.5 bg-white border border-gray-200 text-xs font-black tracking-widest uppercase text-gray-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all rounded-xl shadow-sm active:scale-95">
                     View Profile
                 </button>
             </div>
 
             <button onclick="logout()"
-                class="flex items-center gap-3 px-4 py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-all font-bold w-full group">
-                <i data-lucide="log-out" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i> Sign Out
+                class="flex items-center justify-center md:justify-start gap-3 p-3 md:px-4 md:py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-all font-bold w-12 md:w-full group"
+                title="Sign Out">
+                <i data-lucide="log-out" class="w-5 h-5 flex-shrink-0 group-hover:-translate-x-1 transition-transform"></i>
+                <span class="hidden md:inline">Sign Out</span>
             </button>
         </div>
     </div>
 
     <!-- Main Content -->
-    <main class="flex-1 relative h-screen overflow-y-auto w-full p-6 md:p-10 pt-20 md:pt-10 pb-8 max-w-4xl mx-auto">
+    <main class="flex-1 relative h-screen overflow-y-auto w-full p-4 md:p-10 pb-8 max-w-4xl mx-auto">
         <h2 class="text-2xl md:text-4xl lg:text-5xl font-black mb-6 md:mb-10 text-gray-900 tracking-tight text-center">Design Assessment
         </h2>
 
