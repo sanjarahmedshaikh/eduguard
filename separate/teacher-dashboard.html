@@ -108,7 +108,7 @@
         const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
 
         if (!user || user.role !== 'teacher') {
-            safeNavigate('login.html');
+            safeNavigate('index.html');
             document.getElementById('profile-name').innerText = "Guest (Preview)";
             document.getElementById('profile-avatar').innerText = "G";
         } else {
@@ -116,7 +116,7 @@
             document.getElementById('profile-avatar').innerText = user.name.charAt(0).toUpperCase();
         }
 
-        function logout() { sessionStorage.clear(); safeNavigate('login.html'); }
+        function logout() { sessionStorage.clear(); safeNavigate('index.html'); }
         function showToast(msg, type = 'success') {
             const toastRoot = document.getElementById('toast-root');
             if (toastRoot) {

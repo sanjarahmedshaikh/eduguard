@@ -112,14 +112,14 @@
 
         function logout() {
             sessionStorage.clear();
-            safeNavigate('login.html');
+            safeNavigate('index.html');
         }
 
         const API_BASE = "https://eduguard-2xfk.onrender.com/api";
         const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
 
         if (!user || user.role !== 'student') {
-            safeNavigate('login.html');
+            safeNavigate('index.html');
             document.getElementById('profile-name-sidebar').innerText = 'Guest (Preview)';
             document.getElementById('profile-avatar').innerText = 'G';
         } else {
