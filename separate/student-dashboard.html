@@ -86,13 +86,13 @@
         </div>
 
         <div class="flex flex-col gap-2 md:gap-3 px-2 md:px-6 w-full items-center md:items-stretch">
-            <button onclick="safeNavigate('student-dashboard.html')"
+            <button onclick="sidebarNavigate('student-dashboard.html')"
                 class="items-center-compact flex flex-row items-center justify-center md:justify-start gap-4 p-2.5 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-full transition-all text-orange-700 bg-orange-50/80 font-black shadow-sm border border-orange-100"
                 title="Assessments">
                 <i data-lucide="book-open" class="w-[22px] h-[22px] flex-shrink-0"></i>
                 <span class="text-sm tracking-wide hidden-compact">Assessments</span>
             </button>
-            <button onclick="safeNavigate('student-results.html')"
+            <button onclick="sidebarNavigate('student-results.html')"
                 class="items-center-compact flex flex-row items-center justify-center md:justify-start gap-4 p-2.5 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold"
                 title="My History">
                 <i data-lucide="history" class="w-[22px] h-[22px] flex-shrink-0"></i>
@@ -202,17 +202,21 @@
         }
 
         function safeNavigate(url) {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth < 768 && sidebar && !sidebar.classList.contains('expanded')) {
-                sidebar.classList.add('expanded');
-                return;
-            }
             try {
                 window.location.href = url;
             } catch (e) {
                 console.warn(`Navigation to ${url} blocked by preview sandbox.`);
                 showToast(`Navigation to ${url} blocked in preview. Please run locally.`);
             }
+        }
+
+        function sidebarNavigate(url) {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth < 768 && sidebar && !sidebar.classList.contains('expanded')) {
+                sidebar.classList.add('expanded');
+                return;
+            }
+            safeNavigate(url);
         }
 
         function logout() {
