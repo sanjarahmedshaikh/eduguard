@@ -30,7 +30,8 @@
                         <p
                             class="text-xs font-bold text-gray-500 flex items-center gap-1.5 bg-white border border-gray-200 px-3 py-1 rounded-md shadow-sm w-fit">
                             <i data-lucide="calendar" class="w-3.5 h-3.5"></i> <span id="modal-date-text">Unknown
-                                Date</span></p>
+                                Date</span>
+                        </p>
                     </div>
                 </div>
                 <button onclick="closeModal()"
@@ -194,7 +195,7 @@
             }
         }
 
-        const API_BASE = "http://localhost:5500/api";
+        const API_BASE = "https://eduguard-2xfk.onrender.com";
         const examId = sessionStorage.getItem('view_exam_id');
         const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
 

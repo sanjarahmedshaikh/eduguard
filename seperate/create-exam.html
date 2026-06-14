@@ -154,7 +154,7 @@
             safeNavigate('login.html');
         }
 
-        const API_BASE = "http://localhost:5500/api";
+        const API_BASE = "https://eduguard-2xfk.onrender.com";
         const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
 
         if (!user || user.role !== 'teacher') {

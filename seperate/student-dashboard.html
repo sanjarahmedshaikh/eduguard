@@ -134,7 +134,7 @@
             }
         }
 
-        const API_BASE = "http://localhost:5500/api";
+        const API_BASE = "https://eduguard-2xfk.onrender.com";
         const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
         let availableExams = [];
 
@@ -226,11 +226,11 @@
             }
 
             sessionStorage.setItem('active_exam_id', id);
-            
+
             // Open in a new popup window without navigation controls
             const windowFeatures = "menubar=no,location=no,resizable=yes,scrollbars=yes,status=no,toolbar=no,width=" + screen.width + ",height=" + screen.height;
             window.open('student-exam.html', '_blank', windowFeatures);
-            
+
             // Optional: Show a message on the dashboard that the exam is running in a popup
             showToast("Exam started in a new secure window.", "success");
         }

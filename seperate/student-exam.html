@@ -34,7 +34,8 @@
     <footer class="p-4 md:p-6 border-t border-gray-200 bg-gray-50/90 backdrop-blur-2xl">
         <div class="max-w-5xl mx-auto flex gap-4 w-full">
             <button onclick="endExamPrompt()" id="end-btn"
-                class="flex-1 py-4 rounded-xl font-black text-gray-700 bg-gray-200 hover:bg-red-600 hover:text-white transition-all uppercase text-base tracking-[0.1em]">End Test</button>
+                class="flex-1 py-4 rounded-xl font-black text-gray-700 bg-gray-200 hover:bg-red-600 hover:text-white transition-all uppercase text-base tracking-[0.1em]">End
+                Test</button>
             <button onclick="nextQ()" id="next-btn"
                 class="flex-[2] py-4 rounded-xl font-black text-white bg-gray-900 hover:bg-black uppercase text-base tracking-[0.1em]">Next
                 Question</button>
@@ -61,7 +62,7 @@
             }
         }
 
-        const API_BASE = "http://localhost:5500/api";
+        const API_BASE = "https://eduguard-2xfk.onrender.com";
         const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
         const examId = sessionStorage.getItem('active_exam_id');
 
@@ -112,7 +113,7 @@
                 }
 
                 document.getElementById('ex-title').innerText = activeExam.title;
-                
+
                 const savedState = sessionStorage.getItem(`exam_state_${examId}`);
                 if (savedState) {
                     const parsedState = JSON.parse(savedState);
@@ -130,14 +131,14 @@
 
                 window.addEventListener('blur', handleTabSwitch);
                 document.addEventListener('visibilitychange', handleTabSwitch);
-                
+
                 // Prevent back button
                 history.pushState(null, null, location.href);
                 window.onpopstate = function () {
                     history.go(1);
                     showToast("You cannot leave the exam until it is submitted.", "error");
                 };
-                
+
                 document.getElementById('exam-timer').innerText = `${Math.floor(examState.timeLeft / 60)}:${(examState.timeLeft % 60).toString().padStart(2, '0')}`;
                 renderQ();
             } catch (error) {
@@ -188,7 +189,7 @@
 
             try {
                 let newQ;
-                
+
                 // Pull from pre-generated penalty questions using the shuffleCount as an index so it's consistent across reloads
                 if (activeExam.penaltyQuestions && activeExam.penaltyQuestions.length > 0) {
                     const pIndex = (examState.shuffleCount - 1) % activeExam.penaltyQuestions.length;
@@ -248,7 +249,7 @@
             }
             sessionStorage.removeItem('active_exam_id');
             sessionStorage.removeItem(`exam_state_${examId}`);
-            
+
             // Check if we are in a popup
             if (window.opener && !window.opener.closed) {
                 window.opener.location.href = 'student-results.html';
