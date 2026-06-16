@@ -43,28 +43,23 @@
     </style>
 </head>
 
-<body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex">
+<body class="bg-gray-50 text-gray-900 font-sans antialiased min-h-screen flex flex-col">
     <div id="toast-root"></div>
-    <main class="flex-1 relative h-screen overflow-hidden">
-        <div class="min-h-screen bg-gray-50 flex w-full items-center justify-center p-3 md:p-4">
-            <div
-                class="max-w-5xl w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-gray-100 animate-in slide-in-from-top-5">
-                <div
-                    class="md:w-5/12 bg-gradient-to-br from-indigo-600 to-indigo-800 p-6 md:p-12 text-white flex flex-col justify-center relative overflow-hidden">
-                    <div class="relative z-10">
-                        <div
-                            class="bg-white/20 w-14 h-14 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-4 md:mb-8 backdrop-blur-md shadow-inner border border-white/20">
-                            <i data-lucide="shield-alert" class="w-10 h-10 text-white drop-shadow-md"></i>
-                        </div>
-                        <h1 class="text-3xl md:text-5xl font-black mb-2 md:mb-4 tracking-tight drop-shadow-sm">EduGuard</h1>
-                        <p class="text-indigo-100 text-sm md:text-lg font-medium leading-relaxed">The secure, AI-powered
-                            examination platform designed for modern education integrity.</p>
+    <main class="flex-1 flex items-center justify-center p-3 md:p-4 w-full">
+        <div class="max-w-5xl w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-gray-100 animate-in slide-in-from-top-5">
+            <div class="md:w-5/12 bg-gradient-to-br from-indigo-600 to-indigo-800 p-6 md:p-12 text-white flex flex-col justify-center relative overflow-hidden">
+                <div class="relative z-10">
+                    <div class="bg-white/20 w-14 h-14 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-4 md:mb-8 backdrop-blur-md shadow-inner border border-white/20">
+                        <i data-lucide="shield-alert" class="w-10 h-10 text-white drop-shadow-md"></i>
                     </div>
-                    <div class="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+                    <h1 class="text-3xl md:text-5xl font-black mb-2 md:mb-4 tracking-tight drop-shadow-sm">EduGuard</h1>
+                    <p class="text-indigo-100 text-sm md:text-lg font-medium leading-relaxed">The secure, AI-powered
+                        examination platform designed for modern education integrity.</p>
                 </div>
+                <div class="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
+            </div>
 
-                <div id="auth-panel" class="md:w-7/12 p-5 md:p-14 flex flex-col justify-center bg-white relative">
-                </div>
+            <div id="auth-panel" class="md:w-7/12 p-5 md:p-14 flex flex-col justify-center bg-white relative">
             </div>
         </div>
     </main>
