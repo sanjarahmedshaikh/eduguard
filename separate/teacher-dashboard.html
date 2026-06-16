@@ -7,100 +7,7 @@
     <title>Teacher Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        @media (max-width: 767px) {
-            body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
-        }
-        #sidebar {
-            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        @media (max-width: 767px) {
-            #sidebar {
-                position: fixed;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                z-index: 100;
-                height: 100dvh !important;
-            }
-            #sidebar:not(.expanded) {
-                width: 4rem; /* w-16 */
-                box-shadow: none;
-            }
-            #sidebar:not(.expanded) .hidden-compact {
-                display: none !important;
-            }
-            #sidebar:not(.expanded) .items-center-compact {
-                align-items: center !important;
-                justify-content: center !important;
-                width: 3rem !important; /* w-12 */
-                padding: 0.75rem !important;
-            }
-            #sidebar.expanded {
-                width: 18rem; /* w-72 */
-                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.15);
-            }
-            #sidebar-overlay {
-                display: none;
-                position: fixed;
-                inset: 0;
-                background-color: rgba(0, 0, 0, 0.4);
-                backdrop-filter: blur(4px);
-                z-index: 90;
-            }
-            #sidebar.expanded ~ #sidebar-overlay {
-                display: block;
-            }
-            main {
-                margin-left: 4rem !important;
-                width: calc(100% - 4rem) !important;
-            }
-            .logo-container {
-                display: flex;
-            }
-            #sidebar:not(.expanded) .logo-container {
-                align-items: center !important;
-                justify-content: center !important;
-                padding-left: 0 !important;
-                padding-right: 0 !important;
-            }
-            #sidebar.expanded .logo-container {
-                align-items: flex-start !important;
-                padding-left: 1.5rem !important; /* px-6 */
-                padding-right: 1.5rem !important;
-            }
-            #sidebar:not(.expanded) .nav-container {
-                padding-left: 0.5rem !important; /* px-2 */
-                padding-right: 0.5rem !important;
-            }
-            #sidebar.expanded .nav-container {
-                padding-left: 1.5rem !important; /* px-6 */
-                padding-right: 1.5rem !important;
-            }
-            #sidebar:not(.expanded) .bottom-container {
-                padding-left: 0.5rem !important; /* px-2 */
-                padding-right: 0.5rem !important;
-                align-items: center !important;
-            }
-            #sidebar.expanded .bottom-container {
-                padding-left: 1.5rem !important; /* px-6 */
-                padding-right: 1.5rem !important;
-                align-items: stretch !important;
-            }
-            #sidebar:not(.expanded) .profile-box {
-                justify-content: center !important;
-            }
-            #sidebar.expanded .profile-box {
-                justify-content: flex-start !important;
-            }
-        }
-        @media (min-width: 768px) {
-            #sidebar {
-                position: relative;
-                width: 18rem; /* w-72 */
-            }
-        }
-    </style>
+    
 </head>
 
 <body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex">
@@ -108,14 +15,14 @@
 
     <!-- Sidebar -->
     <div id="sidebar" onclick="handleSidebarClick(event)"
-        class="h-screen bg-white border-r border-gray-100 flex flex-col justify-start pt-3 md:pt-6 z-50 overflow-y-auto flex-shrink-0 w-16 md:w-72 transition-all duration-300 relative">
+        class="fixed bottom-0 left-0 right-0 h-[4.5rem] md:h-screen bg-white border-t md:border-t-0 md:border-r border-gray-100 flex flex-row md:flex-col justify-around md:justify-start pt-0 md:pt-6 z-[100] md:z-50 overflow-visible md:overflow-y-auto flex-shrink-0 w-full md:w-72 transition-all duration-300 md:relative">
         
 
 
-        <div onclick="toggleSidebar(event)" class="logo-container cursor-pointer mb-4 md:mb-10 px-2 md:px-8 w-full pt-2 flex flex-col items-center md:items-start">
+        <div onclick="toggleSidebar(event)" class="logo-container hidden md:flex cursor-pointer mb-10 px-8 w-full pt-2 flex-col items-start">
             <h1 class="text-3xl font-black text-indigo-600 flex items-center justify-start gap-3">
                 <i data-lucide="shield-alert" class="w-8 h-8 flex-shrink-0 text-indigo-600"></i>
-                <span class="hidden-compact">EduGuard</span>
+                <span class="hidden md:inline-block">EduGuard</span>
             </h1>
             <div class="hidden-compact flex items-center gap-2 mt-4 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 w-max">
                 <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
@@ -123,31 +30,31 @@
             </div>
         </div>
 
-        <div class="nav-container flex flex-col gap-2 md:gap-3 px-2 md:px-6 w-full items-center md:items-stretch">
+        <div class="nav-container contents md:flex md:flex-col md:gap-3 md:px-6 w-full md:items-stretch">
             <button onclick="sidebarNavigate('teacher-dashboard.html')"
-                class="items-center-compact flex flex-row items-center justify-start gap-4 p-2.5 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-full transition-all text-indigo-700 bg-indigo-50/80 font-black shadow-sm border border-indigo-100"
+                class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-4 p-2 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-auto md:w-full transition-all text-indigo-700 bg-indigo-50/80 font-black shadow-sm border border-indigo-100"
                 title="Dashboard">
                 <i data-lucide="layout-dashboard" class="w-[22px] h-[22px] flex-shrink-0"></i>
-                <span class="text-sm tracking-wide hidden-compact">Dashboard</span>
+                <span class="text-[10px] md:text-sm tracking-wide block md:inline-block mt-1 md:mt-0">Dashboard</span>
             </button>
             <button onclick="sidebarNavigate('create-exam.html')"
-                class="items-center-compact flex flex-row items-center justify-start gap-4 p-2.5 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold"
+                class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-4 p-2 md:px-5 md:py-3.5 rounded-xl md:rounded-2xl w-auto md:w-full transition-all text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-bold"
                 title="Create Exam">
                 <i data-lucide="plus-circle" class="w-[22px] h-[22px] flex-shrink-0"></i>
-                <span class="text-sm tracking-wide hidden-compact">Create Exam</span>
+                <span class="text-[10px] md:text-sm tracking-wide block md:inline-block mt-1 md:mt-0">Create Exam</span>
             </button>
         </div>
 
         <!-- Profile & Sign Out Bottom Section -->
-        <div class="bottom-container flex mt-auto pb-4 md:pb-10 w-full px-2 md:px-8 flex-col gap-3 md:gap-4 items-center md:items-stretch">
+        <div class="bottom-container contents md:flex md:mt-auto md:pb-10 w-full md:px-8 md:flex-col md:gap-4 md:items-stretch">
             <div
-                class="items-center-compact flex items-center justify-start gap-3 text-[10px] font-black tracking-widest text-green-600 bg-green-50 p-2.5 md:px-4 md:py-3 rounded-xl border border-green-100 shadow-sm w-full"
+                class="hidden md:flex items-center justify-start gap-3 text-[10px] font-black tracking-widest text-green-600 bg-green-50 p-2.5 md:px-4 md:py-3 rounded-xl border border-green-100 shadow-sm w-full"
                 title="System Online">
                 <i data-lucide="wifi" class="w-4 h-4 flex-shrink-0 text-green-600"></i>
-                <span class="hidden-compact">SYSTEM ONLINE</span>
+                <span class="hidden md:inline-block">SYSTEM ONLINE</span>
             </div>
 
-            <div class="flex flex-col gap-3 p-0 md:p-4 bg-transparent md:bg-gray-50 rounded-2xl border-0 md:border md:border-gray-100 md:shadow-sm w-full items-center md:items-stretch">
+            <div class="hidden md:flex flex-col gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100 shadow-sm w-full items-stretch">
                 <div class="profile-box flex items-center gap-3 overflow-hidden justify-center md:justify-start">
                     <div id="profile-avatar" onclick="handleProfileClick(event)"
                         class="w-10 h-10 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center font-black flex-shrink-0 text-lg border border-indigo-200 cursor-pointer md:cursor-default"
@@ -161,16 +68,20 @@
                     </div>
                 </div>
                 <button onclick="handleProfileClick(event)"
-                    class="hidden-compact w-full py-2.5 bg-white border border-gray-200 text-xs font-black tracking-widest uppercase text-gray-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all rounded-xl shadow-sm active:scale-95">
+                    class="hidden md:block w-full py-2.5 bg-white border border-gray-200 text-xs font-black tracking-widest uppercase text-gray-600 hover:border-indigo-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all rounded-xl shadow-sm active:scale-95">
                     View Profile
                 </button>
             </div>
 
+            <button onclick="handleProfileClick(event)" class="md:hidden flex flex-col items-center justify-center gap-1 p-2 w-auto transition-all text-gray-500 hover:text-indigo-600 font-bold" title="Profile">
+                <i data-lucide="user" class="w-[22px] h-[22px] flex-shrink-0"></i>
+                <span class="text-[10px] md:text-sm tracking-wide block md:inline-block mt-1 md:mt-0">Profile</span>
+            </button>
             <button onclick="logout(); event.stopPropagation();"
-                class="items-center-compact flex items-center justify-start gap-3 p-2.5 md:px-4 md:py-3 text-sm text-gray-500 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-xl transition-all font-bold w-full group"
+                class="flex flex-col md:flex-row items-center justify-center md:justify-start gap-1 md:gap-3 p-2 md:px-4 md:py-3 text-gray-500 hover:text-red-600 md:hover:bg-red-50 border border-transparent md:hover:border-red-100 rounded-xl transition-all font-bold w-auto md:w-full group"
                 title="Sign Out">
                 <i data-lucide="log-out" class="w-5 h-5 flex-shrink-0 group-hover:-translate-x-1 transition-transform"></i>
-                <span class="hidden-compact">Sign Out</span>
+                <span class="hidden md:inline-block">Sign Out</span>
             </button>
         </div>
     </div>
@@ -179,7 +90,7 @@
     <div id="sidebar-overlay" onclick="collapseSidebar()"></div>
 
     <!-- Main Content -->
-    <main class="flex-1 relative h-screen overflow-y-auto w-full p-4 md:p-10 pb-8 max-w-7xl mx-auto">
+    <main class="flex-1 relative h-screen overflow-y-auto w-full p-4 md:p-10 pb-24 md:pb-8 max-w-7xl mx-auto">
         <header class="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-8">
             <div>
                 <h2 class="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">Dashboard Overview</h2>
