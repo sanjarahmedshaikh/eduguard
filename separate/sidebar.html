@@ -93,11 +93,7 @@
         }
 
         function handleSidebarClick(e) {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth < 768 && !sidebar.classList.contains('expanded')) {
-                sidebar.classList.add('expanded');
-                e.stopPropagation();
-            }
+            // Mobile bottom nav doesn't need to expand
         }
 
         function collapseSidebar() {
@@ -123,20 +119,10 @@
         }
 
         function sidebarNavigate(url) {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth < 768 && sidebar && !sidebar.classList.contains('expanded')) {
-                sidebar.classList.add('expanded');
-                return;
-            }
             safeNavigate(url);
         }
 
         function logout() {
-            const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth < 768 && sidebar && !sidebar.classList.contains('expanded')) {
-                sidebar.classList.add('expanded');
-                return;
-            }
             sessionStorage.clear();
             safeNavigate('index.html');
         }
