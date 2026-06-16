@@ -27,19 +27,17 @@
                 class="font-mono font-black text-2xl text-red-700">00:00</span></div>
     </header>
 
-    <main class="flex-1 p-4 md:p-8 overflow-y-auto max-w-5xl mx-auto w-full relative z-10 flex flex-col justify-center">
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto max-w-5xl mx-auto w-full relative z-10 pb-20">
         <h3 id="q-text" class="text-xl md:text-2xl lg:text-3xl font-black text-gray-900 mb-6 md:mb-8 leading-tight"></h3>
         <div id="q-options" class="space-y-4"></div>
     </main>
 
-    <footer class="p-3 md:p-6 border-t border-gray-200 bg-gray-50/90 backdrop-blur-2xl">
-        <div class="max-w-5xl mx-auto flex gap-4 w-full">
-            <button onclick="endExamPrompt()" id="end-btn"
-                class="flex-1 py-3 md:py-4 rounded-xl font-black text-gray-700 bg-gray-200 hover:bg-red-600 hover:text-white transition-all uppercase text-sm md:text-base tracking-[0.1em]">End
-                Test</button>
+    <footer class="p-3 md:p-6 border-t border-gray-200 bg-gray-50/90 backdrop-blur-2xl shrink-0">
+        <div class="max-w-5xl mx-auto flex gap-3 md:gap-4 w-full">
+            <button onclick="prevQ()" id="prev-btn"
+                class="flex-1 py-3 md:py-4 rounded-xl font-black text-gray-700 bg-gray-200 hover:bg-gray-300 transition-all uppercase text-sm md:text-base tracking-[0.1em]">Previous</button>
             <button onclick="nextQ()" id="next-btn"
-                class="flex-[2] py-3 md:py-4 rounded-xl font-black text-white bg-gray-900 hover:bg-black uppercase text-sm md:text-base tracking-[0.1em]">Next
-                Question</button>
+                class="flex-1 py-3 md:py-4 rounded-xl font-black text-white bg-gray-900 hover:bg-black transition-all uppercase text-sm md:text-base tracking-[0.1em]">Next Question</button>
         </div>
     </footer>
 
@@ -154,7 +152,16 @@
 
             document.getElementById('q-text').innerText = `Q${examState.currentQ + 1}. ${q.q}`;
             document.getElementById('next-btn').innerText = isLast ? 'Submit Assessment' : 'Next Question';
-            document.getElementById('next-btn').className = `flex-1 py-4 rounded-xl font-black text-white uppercase text-base tracking-[0.1em] ${isLast ? 'bg-green-600' : 'bg-gray-900'}`;
+            document.getElementById('next-btn').className = `flex-1 py-3 md:py-4 rounded-xl font-black text-white uppercase text-sm md:text-base tracking-[0.1em] transition-all ${isLast ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-900 hover:bg-black'}`;
+
+            const prevBtn = document.getElementById('prev-btn');
+            if (examState.currentQ === 0) {
+                prevBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                prevBtn.classList.remove('hover:bg-gray-300');
+            } else {
+                prevBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                prevBtn.classList.add('hover:bg-gray-300');
+            }
 
             document.getElementById('q-options').innerHTML = q.options.map((opt, i) => {
                 const sel = examState.selectedAnswers[examState.currentQ] === i;
@@ -164,15 +171,17 @@
 
         function setAns(i) { examState.selectedAnswers[examState.currentQ] = i; saveState(); renderQ(); }
 
+        function prevQ() {
+            if (examState.currentQ > 0) {
+                examState.currentQ--;
+                saveState();
+                renderQ();
+            }
+        }
+
         function nextQ() {
             if (examState.currentQ === examState.questions.length - 1) submitExam();
             else { examState.currentQ++; saveState(); renderQ(); }
-        }
-
-        function endExamPrompt() {
-            if (confirm("Are you sure you want to end the test? This action cannot be undone and your current answers will be submitted.")) {
-                submitExam();
-            }
         }
 
         async function handleTabSwitch(e) {
