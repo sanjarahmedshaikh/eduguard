@@ -259,6 +259,7 @@
             }
             sessionStorage.removeItem('active_exam_id');
             sessionStorage.removeItem(`exam_state_${examId}`);
+            localStorage.removeItem(`ongoing_exam_${user.id}_${activeExam._id}`);
 
             // Check if we are in a popup
             if (window.opener && !window.opener.closed) {

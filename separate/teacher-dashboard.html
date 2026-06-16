@@ -139,37 +139,6 @@
             // Mobile bottom nav doesn't need to expand
         }
 
-        function collapseSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.remove('expanded');
-        }
-
-        const API_BASE = "https://eduguard-2xfk.onrender.com/api";
-        const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
-
-        if (!user || user.role !== 'teacher') {
-            safeNavigate('index.html');
-            document.getElementById('profile-name').innerText = "Guest (Preview)";
-            document.getElementById('profile-avatar').innerText = "G";
-        } else {
-            document.getElementById('profile-name').innerText = user.name;
-            document.getElementById('profile-avatar').innerText = user.name.charAt(0).toUpperCase();
-        }
-
-        function logout() {
-            sessionStorage.clear();
-            safeNavigate('index.html');
-        }
-
-        
-        function showToast(msg, type = 'success') {
-            const toastRoot = document.getElementById('toast-root');
-            if (toastRoot) {
-                toastRoot.innerHTML = `<div class="fixed top-6 right-6 z-[9999] p-4 rounded-2xl shadow-2xl ${type === 'error' ? 'bg-red-600' : 'bg-gray-900'} text-white text-sm font-semibold">${msg}</div>`;
-                setTimeout(() => toastRoot.innerHTML = '', 3000);
-            }
-        }
-
         async function fetchExams() {
             try {
                 const res = await fetch(`${API_BASE}/exams`);
