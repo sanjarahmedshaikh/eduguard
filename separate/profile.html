@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans antialiased overflow-hidden h-screen flex">
+    <div id="toast-root"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 relative h-screen overflow-y-auto w-full p-4 md:p-10 pb-24 md:pb-8 max-w-3xl mx-auto">
+        <header class="flex items-center gap-4 mb-8 sticky top-0 bg-gray-50/95 backdrop-blur-xl z-40 py-4 border-b border-gray-200 -mx-4 px-4 md:-mx-10 md:px-10 rounded-b-2xl">
+            <button onclick="goBack()" class="p-3 bg-white border border-gray-200 hover:bg-gray-100 rounded-2xl transition-all shadow-sm">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+            <h2 class="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Profile Settings</h2>
+        </header>
+
+        <div class="space-y-6">
+            <!-- Profile Info -->
+            <section class="bg-white p-6 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] shadow-sm border border-gray-100">
+                <div class="flex flex-col items-center text-center mb-8">
+                    <div id="profile-avatar-large" class="w-24 h-24 bg-indigo-100 text-indigo-700 rounded-[2rem] flex items-center justify-center font-black text-4xl border-4 border-indigo-50 shadow-inner mb-4">
+                        U
+                    </div>
+                    <h3 id="profile-name-large" class="text-2xl font-black text-gray-900">User Name</h3>
+                    <p id="profile-role" class="text-sm font-bold tracking-widest text-gray-500 uppercase mt-1">Role</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-black text-gray-400 uppercase mb-2 ml-1">Full Name</label>
+                        <input id="edit-name" type="text" class="w-full p-4 border-2 border-gray-100 rounded-2xl bg-gray-50 focus:bg-white focus:border-indigo-400 outline-none font-bold text-gray-800 transition-all" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black text-gray-400 uppercase mb-2 ml-1">Email Address</label>
+                        <input id="edit-email" type="email" disabled class="w-full p-4 border-2 border-gray-100 rounded-2xl bg-gray-100 text-gray-500 outline-none font-bold cursor-not-allowed" value="user@example.com" />
+                    </div>
+                </div>
+
+                <button onclick="saveProfile()" class="w-full mt-6 py-4 bg-indigo-600 text-white rounded-2xl font-black tracking-widest uppercase hover:bg-indigo-700 shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+                    <i data-lucide="save" class="w-5 h-5"></i> Save Changes
+                </button>
+            </section>
+
+            <!-- Preferences (Mock) -->
+            <section class="bg-white p-6 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] shadow-sm border border-gray-100">
+                <h3 class="font-black text-xl mb-6 flex items-center gap-2"><i data-lucide="settings" class="w-6 h-6 text-indigo-500"></i> Preferences</h3>
+                <div class="flex items-center justify-between p-4 border-2 border-gray-50 rounded-2xl">
+                    <div>
+                        <p class="font-bold text-gray-900">Email Notifications</p>
+                        <p class="text-xs text-gray-500">Receive updates about exams and results</p>
+                    </div>
+                    <div class="w-12 h-6 bg-indigo-500 rounded-full relative cursor-pointer shadow-inner">
+                        <div class="w-5 h-5 bg-white rounded-full absolute top-0.5 right-0.5 shadow-sm"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Danger Zone / Sign Out -->
+            <section class="bg-red-50/50 p-6 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] shadow-sm border border-red-100 mt-8">
+                <h3 class="font-black text-xl text-red-600 mb-2 flex items-center gap-2"><i data-lucide="alert-triangle" class="w-6 h-6"></i> Account Actions</h3>
+                <p class="text-sm text-red-400 font-medium mb-6">Manage your session securely.</p>
+                <button onclick="logout()" class="w-full py-4 bg-red-600 text-white rounded-2xl font-black tracking-widest uppercase hover:bg-red-700 shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+                    <i data-lucide="log-out" class="w-5 h-5"></i> Sign Out
+                </button>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        function showToast(msg, type = 'success') {
+            const toastRoot = document.getElementById('toast-root');
+            if (toastRoot) {
+                toastRoot.innerHTML = `<div class="fixed top-6 right-6 z-[9999] p-4 rounded-2xl shadow-2xl ${type === 'error' ? 'bg-red-600' : 'bg-gray-900'} text-white text-sm font-semibold">${msg}</div>`;
+                setTimeout(() => toastRoot.innerHTML = '', 3000);
+            } else {
+                alert(msg);
+            }
+        }
+
+        function safeNavigate(url) {
+            try {
+                window.location.href = url;
+            } catch (e) {
+                console.warn(`Navigation to ${url} blocked by preview sandbox.`);
+                showToast(`Navigation to ${url} blocked in preview. Please run locally.`);
+            }
+        }
+
+        function goBack() {
+            try {
+                window.history.back();
+            } catch (e) {
+                safeNavigate('index.html');
+            }
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            safeNavigate('index.html');
+        }
+
+        const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
+
+        if (!user) {
+            safeNavigate('index.html');
+        } else {
+            document.getElementById('profile-name-large').innerText = user.name;
+            document.getElementById('profile-avatar-large').innerText = user.name.charAt(0).toUpperCase();
+            document.getElementById('profile-role').innerText = user.role;
+            document.getElementById('edit-name').value = user.name;
+            // Use role to slightly style the avatar differently
+            if (user.role === 'student') {
+                const avatar = document.getElementById('profile-avatar-large');
+                avatar.classList.remove('bg-indigo-100', 'text-indigo-700', 'border-indigo-50');
+                avatar.classList.add('bg-orange-100', 'text-orange-700', 'border-orange-50');
+            }
+        }
+
+        function saveProfile() {
+            const newName = document.getElementById('edit-name').value.trim();
+            if (!newName) return showToast("Name cannot be empty.", "error");
+            
+            user.name = newName;
+            sessionStorage.setItem('eduguard_user', JSON.stringify(user));
+            
+            document.getElementById('profile-name-large').innerText = user.name;
+            document.getElementById('profile-avatar-large').innerText = user.name.charAt(0).toUpperCase();
+            
+            showToast("Profile updated successfully.");
+        }
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>
