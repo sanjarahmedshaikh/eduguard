@@ -198,36 +198,6 @@
             // Mobile bottom nav doesn't need to expand
         }
 
-
-
-        function collapseSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.remove('expanded');
-        }
-
-        const API_BASE = "https://eduguard-2xfk.onrender.com/api";
-        const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
-
-        if (!user || user.role !== 'teacher') {
-            safeNavigate('index.html');
-            document.getElementById('profile-name').innerText = 'Guest (Preview)';
-            document.getElementById('profile-avatar').innerText = 'G';
-        } else {
-            document.getElementById('profile-name').innerText = user.name;
-            document.getElementById('profile-avatar').innerText = user.name.charAt(0).toUpperCase();
-        }
-
-        function setMinDateTime(inputId) {
-            const input = document.getElementById(inputId);
-            if (input) {
-                const now = new Date();
-                // Format: YYYY-MM-DDThh:mm
-                const offset = now.getTimezoneOffset();
-                const localNow = new Date(now.getTime() - (offset * 60 * 1000));
-                input.min = localNow.toISOString().slice(0, 16);
-            }
-        }
-
         setMinDateTime('ex-valid');
         lucide.createIcons();
 

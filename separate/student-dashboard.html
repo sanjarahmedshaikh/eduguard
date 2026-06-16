@@ -133,19 +133,6 @@
             // Mobile bottom nav doesn't need to expand
         }
 
-        function collapseSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.remove('expanded');
-        }
-
-        function showToast(msg, type = 'success') {
-            const toastRoot = document.getElementById('toast-root');
-            if (toastRoot) {
-                toastRoot.innerHTML = `<div class="fixed top-6 right-6 z-[9999] p-4 rounded-2xl shadow-2xl ${type === 'error' ? 'bg-red-600' : 'bg-gray-900'} text-white text-sm font-semibold">${msg}</div>`;
-                setTimeout(() => toastRoot.innerHTML = '', 3000);
-            }
-        }
-
         function safeNavigate(url) {
             try {
                 window.location.href = url;
@@ -227,7 +214,7 @@
                     const isExpired = e.validUntil && (new Date(e.validUntil) < now);
 
                     return `
-                    <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm flex flex-col h-full group ${isExpired ? 'opacity-80 grayscale-[30%]' : ''}">
+                    <div class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm flex flex-col h-full group ${(isExpired || isOngoing) ? 'opacity-80 grayscale-[30%]' : ''}">
                         <h4 class="font-black text-2xl text-gray-900 mb-3 leading-tight flex-1">${e.title}</h4>
                         <div class="space-y-3 mb-8">
                             <p class="text-sm font-bold text-gray-500 flex items-center gap-2 bg-gray-50 w-fit px-3 py-1.5 rounded-lg border border-gray-100"><i data-lucide="timer" class="w-4 h-4 text-gray-400"></i> ${e.duration} Minutes</p>

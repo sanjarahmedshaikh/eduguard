@@ -190,24 +190,6 @@
             // Mobile bottom nav doesn't need to expand
         }
 
-        function collapseSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.remove('expanded');
-        }
-
-        let currentSubmissions = [];
-        let currentExam = null;
-
-        function showToast(msg, type = 'success') {
-            const toastRoot = document.getElementById('toast-root');
-            if (toastRoot) {
-                toastRoot.innerHTML = `<div class="fixed top-6 right-6 z-[9999] p-4 rounded-2xl shadow-2xl ${type === 'error' ? 'bg-red-600' : 'bg-gray-900'} text-white text-sm font-semibold">${msg}</div>`;
-                setTimeout(() => toastRoot.innerHTML = '', 3000);
-            } else {
-                alert(msg);
-            }
-        }
-
         function safeNavigate(url) {
             try {
                 window.location.href = url;
