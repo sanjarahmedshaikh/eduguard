@@ -116,12 +116,37 @@
     </main>
 
     <script>
+        const API_BASE = "https://eduguard-2xfk.onrender.com/api";
+        const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
+
+        if (!user || user.role !== 'teacher') {
+            safeNavigate('index.html');
+        } else {
+            document.getElementById('profile-name').innerText = user.name;
+            document.getElementById('profile-avatar').innerText = user.name.charAt(0).toUpperCase();
+        }
+
+        function showToast(msg, type = "success") {
+            const toastRoot = document.getElementById('toast-root');
+            if (toastRoot) {
+                toastRoot.innerHTML = `<div class="fixed top-6 right-6 z-[9999] p-4 rounded-2xl shadow-2xl ${type === 'error' ? 'bg-red-500' : 'bg-green-500'} text-white text-sm font-bold transform transition-all duration-300">${msg}</div>`;
+                setTimeout(() => toastRoot.innerHTML = '', 3000);
+            } else {
+                alert(msg);
+            }
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            safeNavigate('index.html');
+        }
+
         function safeNavigate(url) {
             try {
                 window.location.href = url;
             } catch (e) {
                 console.warn(`Navigation to ${url} blocked by preview sandbox.`);
-                showToast(`Navigation to ${url} blocked in preview. Please run locally.`);
+                showToast(`Navigation to ${url} blocked in preview. Please run locally.`, 'error');
             }
         }
 
