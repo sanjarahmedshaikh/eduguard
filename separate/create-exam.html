@@ -198,6 +198,15 @@
             // Mobile bottom nav doesn't need to expand
         }
 
+        function setMinDateTime(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                const now = new Date();
+                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                el.min = now.toISOString().slice(0, 16);
+            }
+        }
+
         setMinDateTime('ex-valid');
         lucide.createIcons();
 
