@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 
 // Use built-in fetch if Node 18+, otherwise fallback to node-fetch
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
@@ -9,7 +10,11 @@ const app = express();
 const port = process.env.PORT || 5500;
 
 // Middleware
-app.use(cors());
+app.use(helmet());
+app.use(cors({
+    origin: ['https://www.eduguardsecure.netlify.app', 'http://localhost:5500'],
+    credentials: true
+}));
 app.use(express.json());
 
 // MongoDB Connection
