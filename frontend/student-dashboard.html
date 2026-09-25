@@ -94,15 +94,23 @@
     <main class="flex-1 relative h-screen overflow-y-auto w-full p-4 md:p-10 pb-24 md:pb-8 max-w-7xl mx-auto">
         <header
             class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-6 bg-gradient-to-br from-indigo-600 to-indigo-900 p-5 md:p-10 rounded-[1.5rem] md:rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden mb-6 md:mb-8">
-            <div class="relative z-10">
-                <p
-                    class="text-indigo-300 font-black tracking-[0.2em] text-[10px] uppercase mb-3 bg-white/10 w-fit px-3 py-1 rounded-full border border-white/20">
-                    Student Portal</p>
+            <div class="relative z-10 flex-1 w-full">
+                <div class="flex items-center justify-between mb-2 md:mb-3">
+                    <p
+                        class="text-indigo-300 font-black tracking-[0.2em] text-[10px] uppercase bg-white/10 w-fit px-3 py-1 rounded-full border border-white/20">
+                        Student Portal</p>
+                    <!-- Mobile Refresh in Right Corner -->
+                    <button onclick="fetchExams()"
+                        class="md:hidden p-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-xl text-white transition-all active:scale-95 shadow-lg flex items-center justify-center"
+                        title="Refresh Assessments">
+                        <i data-lucide="refresh-ccw" class="w-5 h-5"></i>
+                    </button>
+                </div>
                 <h2 id="greet-name" class="text-2xl md:text-4xl lg:text-5xl font-black tracking-tight mb-2 md:mb-3">Hello</h2>
                 <p class="text-indigo-100 font-medium text-base md:text-lg lg:text-xl">Ready to test your knowledge?</p>
             </div>
 
-            <div class="relative z-10 md:self-start">
+            <div class="relative z-10 md:self-start hidden md:block">
                 <button onclick="fetchExams()" id="refresh-btn"
                     class="p-4 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-2xl text-white transition-all active:scale-95 shadow-lg flex items-center justify-center"
                     title="Refresh Assessments">
