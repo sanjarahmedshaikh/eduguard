@@ -105,7 +105,7 @@
             </div>
         </header>
 
-        <div id="stats-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8"></div>
+        <div id="stats-grid" class="grid grid-cols-3 gap-2.5 sm:gap-4 md:gap-6 mb-6 md:mb-8"></div>
 
         <div class="bg-white rounded-[1.5rem] md:rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
             <div class="p-6 md:p-8 border-b border-gray-100 bg-white">
@@ -175,11 +175,21 @@
 
         function renderStats(exams) {
             const pub = exams.filter(e => e.status === 'Published').length;
+            const drafts = exams.length - pub;
             const subs = exams.reduce((acc, curr) => acc + (curr.studentsCount || 0), 0);
             document.getElementById('stats-grid').innerHTML = `
-                <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100"><p class="text-[10px] text-gray-400 uppercase tracking-widest font-black">Published</p><span class="text-6xl font-black text-gray-900">${pub}</span></div>
-                <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100"><p class="text-[10px] text-gray-400 uppercase tracking-widest font-black">Drafts</p><span class="text-6xl font-black text-gray-900">${exams.length - pub}</span></div>
-                <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100"><p class="text-[10px] text-gray-400 uppercase tracking-widest font-black">Submissions</p><span class="text-6xl font-black text-gray-900">${subs}</span></div>
+                <div class="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl md:rounded-[2rem] shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <p class="text-[9px] sm:text-xs md:text-sm text-gray-500 uppercase tracking-widest font-black truncate">Published</p>
+                    <span class="text-2xl sm:text-4xl md:text-6xl font-black text-gray-900 mt-1">${pub}</span>
+                </div>
+                <div class="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl md:rounded-[2rem] shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <p class="text-[9px] sm:text-xs md:text-sm text-gray-500 uppercase tracking-widest font-black truncate">Drafts</p>
+                    <span class="text-2xl sm:text-4xl md:text-6xl font-black text-gray-900 mt-1">${drafts}</span>
+                </div>
+                <div class="bg-white p-3.5 sm:p-6 md:p-8 rounded-2xl md:rounded-[2rem] shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <p class="text-[9px] sm:text-xs md:text-sm text-gray-500 uppercase tracking-widest font-black truncate">Submissions</p>
+                    <span class="text-2xl sm:text-4xl md:text-6xl font-black text-gray-900 mt-1">${subs}</span>
+                </div>
             `;
         }
 
