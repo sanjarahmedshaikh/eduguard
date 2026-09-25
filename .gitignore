@@ -1,3 +1,14 @@
+# 1. Backend dependencies
+node_modules/
+backend/node_modules/
+
+# 2. Secret environment variables (database credentials)
 .env
-.env.*
-!.env.example
+backend/.env
+
+# 3. Local VS Code editor settings
+.vscode/
+
+# 4. OS temporary files
+Thumbs.db
+.DS_Store
