@@ -14,8 +14,24 @@ const port = process.env.PORT || 5500;
 
 // Middleware
 app.use(helmet());
+
+const allowedOrigins = [
+    'https://eduguardsecure.netlify.app',
+    'https://www.eduguardsecure.netlify.app',
+    'http://localhost:5500',
+    'http://localhost:5501',
+    'http://127.0.0.1:5500',
+    'http://127.0.0.1:5501'
+];
+
 app.use(cors({
-    origin: ['https://www.eduguardsecure.netlify.app', 'http://localhost:5500'],
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps, curl, or Postman)
+        if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.netlify.app')) {
+            return callback(null, true);
+        }
+        return callback(new Error('Blocked by CORS'));
+    },
     credentials: true
 }));
 app.use(express.json());
