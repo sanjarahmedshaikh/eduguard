@@ -128,6 +128,6 @@ npx serve .
 ---
 
 ## 👨‍💻 Author
-**Sanjar Ahmed Shaikh**  
+**Sanjarahmed Shaikh**  
 - GitHub: [@sanjarahmedshaikh](https://github.com/sanjarahmedshaikh)
 
