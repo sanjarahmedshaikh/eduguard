@@ -16,8 +16,8 @@ Experience the platform immediately without registration:
 
 | Role | User ID | Password | Access Highlights |
 | :--- | :--- | :--- | :--- |
-| **Teacher** | `demo_teacher` | `password123` | Exam Builder, Penalty Pool Setup, Gradebook & Violation Audits |
-| **Student** | `demo_student` | `password123` | Anti-Cheat Exam Interface, Live Countdown, Instant Results |
+| **Teacher** | `demo_teacher` | `pass123` | Exam Builder, Penalty Pool Setup, Gradebook & Violation Audits |
+| **Student** | `demo_student` | `pass123` | Anti-Cheat Exam Interface, Live Countdown, Instant Results |
 
 > ℹ️ *Note: The backend is hosted on Render's free tier. If the service is waking up from idle, initial API requests may take ~30–45 seconds.*
 
