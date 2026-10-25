@@ -128,6 +128,7 @@
     <script>
         const API_BASE = "https://eduguard-2xfk.onrender.com/api";
         const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
+        const token = sessionStorage.getItem('eduguard_token');
 
         if (!user || user.role !== 'teacher') {
             safeNavigate('index.html');
@@ -255,7 +256,10 @@
                     ex.showExpiredToStudents = newState;
                     await fetch(`${API_BASE}/exams`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                        },
                         body: JSON.stringify(ex)
                     });
                     showToast(`Exam ${newState ? 'will be visible' : 'is now hidden'} to students when expired.`);
@@ -268,14 +272,19 @@
 
         async function deleteExam(id) {
             if (!confirm("Delete this exam?")) return;
-            await fetch(`${API_BASE}/exams/${id}`, { method: 'DELETE' });
+            await fetch(`${API_BASE}/exams/${id}`, {
+                method: 'DELETE',
+                headers: { ...(token ? { 'Authorization': `Bearer ${token}` } : {}) }
+            });
             fetchExams();
         }
 
         function viewResults(id) { sessionStorage.setItem('view_exam_id', id); safeNavigate('teacher-results.html'); }
 
         async function editExam(id) {
-            const res = await fetch(`${API_BASE}/exams`);
+            const res = await fetch(`${API_BASE}/exams`, {
+                headers: { ...(token ? { 'Authorization': `Bearer ${token}` } : {}) }
+            });
             const exams = await res.json();
             const ex = exams.find(e => e._id === id);
             sessionStorage.setItem('pendingExam', JSON.stringify(ex));

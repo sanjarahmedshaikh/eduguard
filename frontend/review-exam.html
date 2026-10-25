@@ -201,6 +201,7 @@
 
         const API_BASE = "https://eduguard-2xfk.onrender.com/api";
         const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
+        const token = sessionStorage.getItem('eduguard_token');
 
         // Load profile data into sidebar
         if (user && user.role === 'teacher') {
@@ -455,7 +456,14 @@
             }
 
             try {
-                await fetch(`${API_BASE}/exams`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(pendingExam) });
+                await fetch(`${API_BASE}/exams`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                    },
+                    body: JSON.stringify(pendingExam)
+                });
                 sessionStorage.removeItem('pendingExam');
                 safeNavigate('teacher-dashboard.html');
             } catch (e) { showToast("Failed to save draft."); }
@@ -477,7 +485,14 @@
             }
 
             try {
-                await fetch(`${API_BASE}/exams`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(pendingExam) });
+                await fetch(`${API_BASE}/exams`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                    },
+                    body: JSON.stringify(pendingExam)
+                });
                 sessionStorage.removeItem('pendingExam');
                 safeNavigate('teacher-dashboard.html');
             } catch (e) { showToast("Publish failed"); }

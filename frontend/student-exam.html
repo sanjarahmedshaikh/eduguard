@@ -63,6 +63,7 @@
 
         const API_BASE = "https://eduguard-2xfk.onrender.com/api";
         const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
+        const token = sessionStorage.getItem('eduguard_token');
         const examId = sessionStorage.getItem('active_exam_id');
 
         let activeExam = null;
@@ -140,6 +141,27 @@
 
                 document.getElementById('exam-timer').innerText = `${Math.floor(examState.timeLeft / 60)}:${(examState.timeLeft % 60).toString().padStart(2, '0')}`;
                 renderQ();
+
+                // Sync proctoring session on the server
+                try {
+                    const sessionRes = await fetch(`${API_BASE}/exam-session/start`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                        },
+                        body: JSON.stringify({ studentId: user.id, studentName: user.name, examId: activeExam._id })
+                    });
+                    if (sessionRes.ok) {
+                        const sessionData = await sessionRes.json();
+                        if (sessionData && typeof sessionData.shuffleCount === 'number') {
+                            examState.shuffleCount = Math.max(examState.shuffleCount, sessionData.shuffleCount);
+                            saveState();
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Session sync:", e);
+                }
             } catch (error) {
                 showToast("Failed to load exam data.", "error");
             }
@@ -200,6 +222,33 @@
             try {
                 let newQ;
 
+                // Sync focus violation to authoritative server-side session
+                try {
+                    const vRes = await fetch(`${API_BASE}/exam-session/violation`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                        },
+                        body: JSON.stringify({
+                            studentId: user.id,
+                            examId: activeExam._id,
+                            currentQ: examState.currentQ
+                        })
+                    });
+                    if (vRes.ok) {
+                        const vData = await vRes.json();
+                        if (typeof vData.shuffleCount === 'number') {
+                            examState.shuffleCount = vData.shuffleCount;
+                        }
+                        if (vData.penaltyQuestion) {
+                            newQ = vData.penaltyQuestion;
+                        }
+                    }
+                } catch (err) {
+                    console.warn("Could not sync violation with server:", err);
+                }
+
                 // Pull from pre-generated penalty questions using the shuffleCount as an index so it's consistent across reloads
                 if (activeExam.penaltyQuestions && activeExam.penaltyQuestions.length > 0) {
                     const pIndex = (examState.shuffleCount - 1) % activeExam.penaltyQuestions.length;
@@ -244,7 +293,11 @@
                 };
 
                 await fetch(`${API_BASE}/submit`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                    },
                     body: JSON.stringify({
                         studentName: user.name,
                         studentId: user.id,

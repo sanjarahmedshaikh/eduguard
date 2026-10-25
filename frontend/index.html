@@ -93,6 +93,7 @@
                     state.authMode = 'login'; updateView();
                 } else {
                     sessionStorage.setItem('eduguard_user', JSON.stringify(data.user));
+                    if (data.token) sessionStorage.setItem('eduguard_token', data.token);
                     window.location.href = data.user.role === 'teacher' ? 'teacher-dashboard.html' : 'student-dashboard.html';
                 }
             } catch (err) { showToast(err.message, "error"); }
