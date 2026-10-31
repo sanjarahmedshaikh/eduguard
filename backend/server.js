@@ -10,7 +10,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'eduguard_secure_jwt_secret_key_2026';
+require('dotenv').config();
+
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    throw new Error('JWT_SECRET must be configured');
+}
 
 const app = express();
 const port = process.env.PORT || 5500;
@@ -71,8 +76,6 @@ app.use('/api/login', authLimiter);
 app.use('/api/register', authLimiter);
 
 // MongoDB Connection
-require('dotenv').config();
-
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB Connected"))
     .catch(err => console.log(err));
@@ -158,17 +161,22 @@ const verifyStudentSession = (req, res, next) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
 
-    if (token) {
-        try {
-            const decoded = jwt.verify(token, JWT_SECRET);
-            const targetStudentId = req.body?.studentId || req.params?.studentId;
-            if (decoded.role === 'student' && targetStudentId && decoded.id !== targetStudentId) {
-                return res.status(403).json({ error: "Access denied. Token does not match student ID." });
-            }
-            req.user = decoded;
-        } catch (err) {
-            return res.status(401).json({ error: "Invalid or expired session. Please log in again." });
+    if (!token) {
+        return res.status(401).json({ error: "Authentication required. Please log in as a student." });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        if (decoded.role !== 'student') {
+            return res.status(403).json({ error: "Access forbidden. Student privileges required." });
         }
+        const targetStudentId = req.body?.studentId || req.params?.studentId;
+        if (targetStudentId && decoded.id !== targetStudentId) {
+            return res.status(403).json({ error: "Access denied. Token does not match student ID." });
+        }
+        req.user = decoded;
+    } catch (err) {
+        return res.status(401).json({ error: "Invalid or expired session. Please log in again." });
     }
     next();
 };
@@ -393,7 +401,7 @@ app.get('/api/exams', async (req, res) => {
             } catch (e) {}
         }
 
-        const exams = await Exam.find();
+        const exams = await Exam.find(isTeacher ? {} : { status: 'Published' });
 
         const responseExams = exams.map(e => {
             const examObj = { ...e.toObject(), id: e._id };
@@ -452,7 +460,7 @@ app.delete('/api/exams/:id', requireTeacher, async (req, res) => {
 
 app.post('/api/submit', verifyStudentSession, async (req, res) => {
     try {
-        const { studentName, studentId, examId, answers, sessionQuestions, shuffleCount } = req.body;
+        const { studentName, studentId, examId, answers } = req.body;
         if (typeof studentId !== 'string' || typeof examId !== 'string' || !mongoose.Types.ObjectId.isValid(examId)) {
             return res.status(400).json({ error: "Invalid field format or Exam ID" });
         }
@@ -476,29 +484,35 @@ app.post('/api/submit', verifyStudentSession, async (req, res) => {
 
         // Retrieve server-side session to verify true shuffle count and prevent client tampering
         const session = await ExamSession.findOne({ studentId, examId, isCompleted: false }).sort({ startedAt: -1 });
-        const authoritativeShuffleCount = session ? session.shuffleCount : (shuffleCount || 0);
+        const authoritativeShuffleCount = session ? session.shuffleCount : 0;
 
-        const questionsToGrade = sessionQuestions || exam.questions;
+        const questionsToGrade = exam.questions.map(q => ({
+            q: q.q,
+            options: q.options,
+            correctIndex: q.correctIndex,
+            replaced: false
+        }));
+        if (session) {
+            session.replacedIndices.forEach((questionIndex, replacementIndex) => {
+                const penaltyIndex = session.penaltyQuestionIndices[replacementIndex];
+                const penaltyQuestion = exam.penaltyQuestions?.[penaltyIndex];
+                if (Number.isInteger(questionIndex) && penaltyQuestion) {
+                    questionsToGrade[questionIndex] = {
+                        q: penaltyQuestion.q,
+                        options: penaltyQuestion.options,
+                        correctIndex: penaltyQuestion.correctIndex,
+                        replaced: true
+                    };
+                }
+            });
+        }
         if (!questionsToGrade || !questionsToGrade.length) {
             return res.status(400).json({ error: "Cannot submit an exam with no questions" });
         }
 
         let correct = 0;
         const details = questionsToGrade.map((q, i) => {
-            // Authoritative server-side answer resolution: match strictly against MongoDB records
-            let realCorrectIndex;
-            const normalQ = exam.questions.find(eq => eq.q === q.q);
-            if (normalQ) {
-                realCorrectIndex = normalQ.correctIndex;
-            } else if (exam.penaltyQuestions) {
-                const penaltyQ = exam.penaltyQuestions.find(pq => pq.q === q.q);
-                if (penaltyQ) {
-                    realCorrectIndex = penaltyQ.correctIndex;
-                }
-            }
-            if (realCorrectIndex === undefined && exam.questions[i]) {
-                realCorrectIndex = exam.questions[i].correctIndex;
-            }
+            const realCorrectIndex = q.correctIndex;
 
             // Extract student answer safely
             const rawStudentAns = answers && answers[i] !== undefined ? answers[i] : (answers && answers[String(i)]);
@@ -515,7 +529,7 @@ app.post('/api/submit', verifyStudentSession, async (req, res) => {
                 studentAnswerIndex: studentAns,
                 correctAnswerIndex: realCorrectIndex,
                 isCorrect,
-                replaced: q.replaced || false
+                replaced: q.replaced
             };
         });
 

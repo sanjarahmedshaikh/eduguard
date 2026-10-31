@@ -342,18 +342,18 @@
                             ${q.replaced && originalQ ? `
                                 <div class="mb-4 pb-4 border-b border-gray-200/60 opacity-60">
                                     <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1 line-through flex items-center gap-1"><i data-lucide="eye-off" class="w-3 h-3"></i> Original Question (Skipped via tab switch)</p>
-                                    <p class="text-sm text-gray-600 line-through">${originalQ.q}</p>
+                                    <p class="text-sm text-gray-600 line-through">${escapeHtml(originalQ.q)}</p>
                                 </div>
                             ` : ''}
 
-                            <p class="font-bold text-gray-900 mb-4 pr-24"><span class="text-gray-400 mr-2">Q${qIdx + 1}.</span> ${q.question}</p>
+                            <p class="font-bold text-gray-900 mb-4 pr-24"><span class="text-gray-400 mr-2">Q${qIdx + 1}.</span> ${escapeHtml(q.question)}</p>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm bg-white p-4 rounded-xl border ${isCorrect ? 'border-green-100' : (!isAnswered ? 'border-gray-200' : 'border-red-100')}">
                                 <div class="flex items-start gap-3">
                                     <div class="mt-0.5"><i data-lucide="${isCorrect ? 'check-circle-2' : (!isAnswered ? 'help-circle' : 'x-circle')}" class="w-5 h-5 ${isCorrect ? 'text-green-500' : (!isAnswered ? 'text-gray-400' : 'text-red-500')}"></i></div>
                                     <div>
                                         <span class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-0.5">Student's Answer</span>
-                                        <span class="font-bold ${isCorrect ? 'text-green-700' : (!isAnswered ? 'text-gray-500 italic' : 'text-red-700')}">${studentAnsText}</span>
+                                        <span class="font-bold ${isCorrect ? 'text-green-700' : (!isAnswered ? 'text-gray-500 italic' : 'text-red-700')}">${escapeHtml(studentAnsText)}</span>
                                     </div>
                                 </div>
                                 ${!isCorrect ? `
@@ -361,7 +361,7 @@
                                     <div class="mt-0.5"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500"></i></div>
                                     <div>
                                         <span class="block text-[10px] font-black uppercase text-gray-400 tracking-widest mb-0.5">Correct Answer</span>
-                                        <span class="font-bold text-green-700">${correctAnsText}</span>
+                                        <span class="font-bold text-green-700">${escapeHtml(correctAnsText)}</span>
                                     </div>
                                 </div>
                                 ` : ''}

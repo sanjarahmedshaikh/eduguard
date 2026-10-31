@@ -88,7 +88,10 @@ Create a `.env` file inside the `backend` folder:
 ```env
 PORT=5500
 MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/eduguard
+JWT_SECRET=<long-random-secret>
 ```
+
+`JWT_SECRET` is required; the backend fails closed if it is missing.
 
 Start the backend:
 ```bash

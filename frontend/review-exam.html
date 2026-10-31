@@ -353,7 +353,7 @@
                         
                         <div class="flex items-center gap-4 mb-2"><span class="w-12 h-12 bg-indigo-50 text-indigo-700 rounded-xl flex items-center justify-center font-black text-xl border border-indigo-100">${idx + 1}</span></div>
                         
-                        <textarea placeholder="Enter question text..." oninput="pendingExam.questions[${idx}].q=this.value" class="w-full p-5 border-2 border-gray-100 rounded-2xl bg-gray-50 focus:bg-white focus:border-indigo-400 outline-none text-gray-900 font-bold text-lg resize-none" rows="2">${q.q}</textarea>
+                        <textarea placeholder="Enter question text..." oninput="pendingExam.questions[${idx}].q=this.value" class="w-full p-5 border-2 border-gray-100 rounded-2xl bg-gray-50 focus:bg-white focus:border-indigo-400 outline-none text-gray-900 font-bold text-lg resize-none" rows="2">${escapeHtml(q.q)}</textarea>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 bg-gray-50/50 p-3 md:p-6 rounded-2xl md:rounded-3xl border border-gray-50">
                             ${q.options.map((opt, optIdx) => `
@@ -364,7 +364,7 @@
                                     </div>
                                     <div class="flex-1 flex gap-3 items-center border-l-2 border-gray-100 pl-4">
                                         <span class="font-black text-gray-400">${String.fromCharCode(65 + optIdx)}</span>
-                                        <input placeholder="Option text..." value="${opt.replace(/"/g, '&quot;')}" oninput="pendingExam.questions[${idx}].options[${optIdx}]=this.value" class="w-full bg-transparent outline-none font-bold" />
+                                        <input placeholder="Option text..." value="${escapeHtml(opt)}" oninput="pendingExam.questions[${idx}].options[${optIdx}]=this.value" class="w-full bg-transparent outline-none font-bold" />
                                     </div>
                                 </div>
                             `).join('')}
@@ -416,7 +416,7 @@
                         
                         <div class="flex items-center gap-4 mb-2"><span class="w-12 h-12 bg-red-50 text-red-700 rounded-xl flex items-center justify-center font-black text-xl border border-red-100">P${idx + 1}</span></div>
                         
-                        <textarea placeholder="Enter penalty question text..." oninput="pendingExam.penaltyQuestions[${idx}].q=this.value" class="w-full p-5 border-2 border-red-100 rounded-2xl bg-red-50/30 focus:bg-white focus:border-red-400 outline-none text-gray-900 font-bold text-lg resize-none" rows="2">${q.q}</textarea>
+                        <textarea placeholder="Enter penalty question text..." oninput="pendingExam.penaltyQuestions[${idx}].q=this.value" class="w-full p-5 border-2 border-red-100 rounded-2xl bg-red-50/30 focus:bg-white focus:border-red-400 outline-none text-gray-900 font-bold text-lg resize-none" rows="2">${escapeHtml(q.q)}</textarea>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 bg-gray-50/50 p-3 md:p-6 rounded-2xl md:rounded-3xl border border-gray-50">
                             ${q.options.map((opt, optIdx) => `
@@ -427,7 +427,7 @@
                                     </div>
                                     <div class="flex-1 flex gap-3 items-center border-l-2 border-gray-100 pl-4">
                                         <span class="font-black text-gray-400">${String.fromCharCode(65 + optIdx)}</span>
-                                        <input placeholder="Option text..." value="${opt.replace(/"/g, '&quot;')}" oninput="pendingExam.penaltyQuestions[${idx}].options[${optIdx}]=this.value" class="w-full bg-transparent outline-none font-bold" />
+                                        <input placeholder="Option text..." value="${escapeHtml(opt)}" oninput="pendingExam.penaltyQuestions[${idx}].options[${optIdx}]=this.value" class="w-full bg-transparent outline-none font-bold" />
                                     </div>
                                 </div>
                             `).join('')}

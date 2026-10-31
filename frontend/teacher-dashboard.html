@@ -212,7 +212,7 @@
                 return `
                 <div class="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between hover:bg-indigo-50/30 gap-6">
                     <div>
-                        <p class="font-black text-gray-900 text-xl">${e.title}</p>
+                        <p class="font-black text-gray-900 text-xl">${escapeHtml(e.title)}</p>
                         <span class="text-xs font-bold text-gray-500 uppercase mt-2 block">${e.status} • ${e.studentsCount || 0} Subs</span>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">

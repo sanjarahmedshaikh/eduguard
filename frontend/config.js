@@ -2,3 +2,13 @@ window.API_BASE = window.location.hostname === 'localhost' || window.location.ho
     ? 'http://localhost:5500/api'
     : 'https://eduguard-2xfk.onrender.com/api';
 var API_BASE = window.API_BASE;
+
+window.escapeHtml = function (value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[char]));
+};
