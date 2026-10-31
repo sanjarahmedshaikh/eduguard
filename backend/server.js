@@ -161,7 +161,8 @@ const verifyStudentSession = (req, res, next) => {
     if (token) {
         try {
             const decoded = jwt.verify(token, JWT_SECRET);
-            if (decoded.role === 'student' && req.body.studentId && decoded.id !== req.body.studentId) {
+            const targetStudentId = req.body?.studentId || req.params?.studentId;
+            if (decoded.role === 'student' && targetStudentId && decoded.id !== targetStudentId) {
                 return res.status(403).json({ error: "Access denied. Token does not match student ID." });
             }
             req.user = decoded;
@@ -569,6 +570,19 @@ app.get('/api/submissions/:examId', requireTeacher, async (req, res) => {
         res.json(await Submission.find({ examId: req.params.examId }));
     } catch (error) {
         console.error("Failed to fetch submissions:", error);
+        res.status(500).json({ error: "Failed to fetch submissions" });
+    }
+});
+
+app.get('/api/submissions/student/:studentId', verifyStudentSession, async (req, res) => {
+    try {
+        const { studentId } = req.params;
+        if (typeof studentId !== 'string') {
+            return res.status(400).json({ error: "Invalid student ID" });
+        }
+        res.json(await Submission.find({ studentId }).sort({ date: -1 }));
+    } catch (error) {
+        console.error("Failed to fetch student submissions:", error);
         res.status(500).json({ error: "Failed to fetch submissions" });
     }
 });

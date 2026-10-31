@@ -7,6 +7,7 @@
     <title>Teacher Results</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="config.js"></script>
     
 </head>
 
@@ -231,7 +232,7 @@
             }
         }
 
-        const API_BASE = "https://eduguard-2xfk.onrender.com/api";
+        const API_BASE = window.API_BASE || "https://eduguard-2xfk.onrender.com/api";
         const examId = sessionStorage.getItem('view_exam_id');
         const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
         const token = sessionStorage.getItem('eduguard_token');
@@ -263,6 +264,10 @@
                     headers: { ...(token ? { 'Authorization': `Bearer ${token}` } : {}) }
                 });
                 let fetchedSubs = await res.json();
+                if (!res.ok || !Array.isArray(fetchedSubs)) {
+                    showToast(fetchedSubs.error || "Failed to fetch results", "error");
+                    fetchedSubs = [];
+                }
 
                 // Sort the submissions by date (newest first)
                 fetchedSubs.sort((a, b) => new Date(b.date) - new Date(a.date));

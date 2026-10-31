@@ -7,6 +7,7 @@
     <title>Student Results</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="config.js"></script>
     
 </head>
 
@@ -147,7 +148,7 @@
 
         
 
-        const API_BASE = "https://eduguard-2xfk.onrender.com/api";
+        const API_BASE = window.API_BASE || "https://eduguard-2xfk.onrender.com/api";
         const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
 
         if (!user || user.role !== 'student') {
@@ -162,19 +163,22 @@
 
         async function fetchResults() {
             try {
-                const exRes = await fetch(`${API_BASE}/exams`);
-                const exams = await exRes.json();
+                const token = sessionStorage.getItem('eduguard_token');
+                const [exRes, sRes] = await Promise.all([
+                    fetch(`${API_BASE}/exams`),
+                    fetch(`${API_BASE}/submissions/student/${user.id}`, {
+                        headers: { ...(token ? { 'Authorization': `Bearer ${token}` } : {}) }
+                    })
+                ]);
 
-                let allSubs = [];
-                for (let ex of exams) {
-                    const sRes = await fetch(`${API_BASE}/submissions/${ex._id}`);
-                    const subs = await sRes.json();
-                    const mySubs = subs.filter(s => s.studentId === user.id);
-                    mySubs.forEach(s => s.examTitle = ex.title);
-                    allSubs = [...allSubs, ...mySubs];
-                }
+                const exams = exRes.ok ? await exRes.json() : [];
+                const subs = sRes.ok ? await sRes.json() : [];
+                const examMap = new Map(exams.map(e => [String(e._id || e.id), e.title]));
 
-                allSubs.sort((a, b) => new Date(b.date) - new Date(a.date));
+                const allSubs = Array.isArray(subs) ? subs.map(s => ({
+                    ...s,
+                    examTitle: examMap.get(String(s.examId)) || 'Assessment'
+                })) : [];
                 document.getElementById('res-body').innerHTML = allSubs.length === 0 ? `<tr><td colspan="4" class="p-10 text-center text-gray-500 font-medium">No past attempts.</td></tr>` : allSubs.map(res => {
                     let answeredCount = 0;
                     let unansweredCount = 0;

@@ -7,6 +7,7 @@
     <title>Teacher Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="config.js"></script>
     
 </head>
 
@@ -126,7 +127,7 @@
     </main>
 
     <script>
-        const API_BASE = "https://eduguard-2xfk.onrender.com/api";
+        const API_BASE = window.API_BASE || "https://eduguard-2xfk.onrender.com/api";
         const user = JSON.parse(sessionStorage.getItem('eduguard_user'));
         const token = sessionStorage.getItem('eduguard_token');
 

@@ -7,6 +7,7 @@
     <title>EduGuard - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="config.js"></script>
     <style>
         .animate-in {
             animation: fadeIn 0.3s ease-out forwards;
@@ -62,7 +63,7 @@
     </main>
 
     <script>
-        const API_BASE = "https://eduguard-2xfk.onrender.com/api";
+        const API_BASE = window.API_BASE || "https://eduguard-2xfk.onrender.com/api";
         let state = { authMode: 'login', authRoleSelection: 'student', isConnecting: false };
 
         function showToast(msg, type = 'success') {
